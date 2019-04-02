@@ -2,13 +2,19 @@
   <!-- Sidebar -->
   <div id="sidebar-wrapper">
       <ul class="sidebar-nav">
-
+          <ul class="nav nav-pills">
           <li class="sidebar-brand">
               <a href="#">
                   Start Bootstrap
               </a>
-              <div class="draggable"></div>
-              <div class="draggable2"></div>
+              <div class="scrollbar" id="style-1">
+
+                <div *ngFor="let item of imgNameArray">
+                  <img src="http://localhost:3000/images/{{item.name}}" width="40" height="40" class="draggable">
+                </div>
+
+              </div>
+          </ul>
       </ul>
   </div>
   <!-- /#sidebar-wrapper -->
@@ -16,6 +22,6 @@
   <!-- Page Content -->
 
   <!-- /#page-content-wrapper -->
-
 </div>
+
 <!-- /#wrapper -->
