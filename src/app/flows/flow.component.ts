@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { map } from 'rxjs/operators';
@@ -9,16 +9,27 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./flow.component.css']
 })
 
-export class FlowComponent {
+export class FlowComponent implements OnInit{
   selectedFile: File = null;
+  imgNameArray:any[] = []
 
   constructor(private http: HttpClient, private el: ElementRef) {}
+
+  ngOnInit(): void {
+    this.onGetIMG();
+  }
 
   onFileSelected(event) {
     console.log(event.target.files[0]);
     console.log("name: "+event.target.files[0].name);
     //console.log(event.target.files.item(0));
     this.selectedFile = <File>event.target.files[0];
+  }
+
+  onGetIMG() {
+    this.http.get<any>('http://localhost:3000/getNameimg').subscribe(result=>{
+      this.imgNameArray = result.data;
+    });
   }
 
 

@@ -12,6 +12,7 @@ import { FlowComponent } from './flows/flow.component';
 import { HomeComponent } from './home/home.component';
 import { createFlowComponent } from './createFlow/createFlow.component';
 import { LoggComponent } from './logg/logg.component';
+import { ControlComponent } from './control/control.component';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +26,8 @@ import { MatTableModule } from '@angular/material/table';
     FlowComponent,
     HomeComponent,
     createFlowComponent,
-    LoggComponent
+    LoggComponent,
+    ControlComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { MatTableModule } from '@angular/material/table';
       { path: 'home', component: HomeComponent },
       { path: 'flow', component: FlowComponent },
       { path: 'createflow', component: createFlowComponent},
-      { path: 'logg', component: LoggComponent }
+      { path: 'logg', component: LoggComponent },
+      { path: 'control', component: ControlComponent }
     ]),
   ],
   providers: [DataService],

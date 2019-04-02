@@ -16,8 +16,15 @@ const mongoURI = 'mongodb://127.0.0.1:27017/myproj';
 //mongoose.connect('mongodb://127.0.0.1:27017/myproj');
 //const conn = mongoose.connect(mongoURI, { useNewUrlParser: true });
 mongoose.connect(mongoURI, { useNewUrlParser: true });
+
+//MongoConnect
 mongoose.connection.on('connected', function () {
-  console.log('connected');
+  console.log('connected Mongo');
+})
+
+//MongoDisConnect
+mongoose.connection.on('disconnected', function () {
+  console.log('disconnected Mongo');
 })
 
 //Model
@@ -26,7 +33,7 @@ var ImgSchema = new ScheMa({
   name: String
 })
 
-var pic = mongoose.model('pic', ImgSchema);
+var picModel = mongoose.model('pic', ImgSchema);
 
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
@@ -41,7 +48,7 @@ const storage = multer.diskStorage({
 
     var namee = file.originalname;
 
-    var newImg = pic({
+    var newImg = picModel({
       name: namee
     });
 
@@ -71,6 +78,9 @@ app.use(cors());
 //   gfs.collection('pic');
 // })
 
+//share Resource
+app.use('/images', express.static(__dirname + '/images'));
+
 // Setting up the root route
 app.get('/', (req, res) => {
     res.end('Welcome to the express server');
@@ -83,6 +93,12 @@ app.get('/', (req, res) => {
 //     res.append('Access-Control-Allow-Credentials', true);
 //     next();
 // })
+
+app.get('/getNameimg', function (req, res) {
+  picModel.find((err, doc)=>{
+    res.json({result: "success", data: doc})
+  })
+})
 
 app.post('/addpic', function (req,res) {
   var pathed = '';

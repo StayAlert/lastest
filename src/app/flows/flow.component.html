@@ -2,3 +2,11 @@
 
 <input id="photo" name="photo" type="file" (change)="onFileSelected($event)">
 <button mat-button (click)="onUpload()">Upload</button>
+<hr>
+
+<p>img u have</p>
+<ol>
+  <li *ngFor="let item of imgNameArray">
+    <img src="http://localhost:3000/images/{{item.name}}" width="40" height="40">
+  </li>
+</ol>
