@@ -4,6 +4,48 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.pdfCanvas {
+  background-size: 22px 22px;
+  background-image: linear-gradient(to right, rgba(73, 127, 160, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(118, 159, 184, 0.2) 1px, transparent 1px);
+  border: 1px solid #dbdbdb;
+  height: 100%;
+  width: 10in;
+  position: fixed;
+  
+  border: 1px solid black;
+  display: inline-block;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.resize-drag {
+  background-color: transparent;
+  color: #000;
+  border-radius: 0px 2px 2px 0px;
+  padding: 0px;
+  margin: 1px 1px;
+  width: 100px;
+  min-width: 50px;
+  min-height: 20px;
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+}
+
+.dropped-element{
+  display: inline-block;
+}
+
+.resize-drag:hover {
+  background-color: rgba(34, 153, 238, 0.6);
+}
+
+.resize-container {
+  width: 100%;
+  height: 240px;
+  z-index: 100;
+}
  body {
   overflow-x: hidden;
 }

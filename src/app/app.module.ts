@@ -20,6 +20,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +32,7 @@ import { MatTableModule } from '@angular/material/table';
     ControlComponent
   ],
   imports: [
+    DragDropModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

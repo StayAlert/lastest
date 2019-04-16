@@ -4,16 +4,23 @@
       <ul class="sidebar-nav">
           <ul class="nav nav-pills">
           <li class="sidebar-brand">
-              <a href="#">
+              <a>
                   Start Bootstrap
               </a>
               <div class="scrollbar" id="style-1">
 
-                <div *ngFor="let item of imgNameArray">
-                  <img src="http://localhost:3000/images/{{item.name}}" width="40" height="40" class="draggable">
-                </div>
+                <div class="draggable" cdkDrag ondblclick="dblclickk()"></div>
 
+                <div  class="movetest" id="movetest" style="position: absolute;display: inline-block">
+                  <div class="resize-drag" id="dragDiv_1" >
+                    <div class="draggable" data-toggle="modal" data-target="#exampleModal"></div>
+                  </div>
+                  <div class="resize-drag" id="dragDiv_1">
+                    <div class="draggable2" ondblclick="dblclickk()"></div>
+                  </div>
+                </div>
               </div>
+          </li>
           </ul>
       </ul>
   </div>
@@ -21,6 +28,7 @@
 
   <!-- Page Content -->
 
+  <div id="pdfCanvas" class="pdfCanvas" ></div>
   <!-- /#page-content-wrapper -->
 </div>
 
