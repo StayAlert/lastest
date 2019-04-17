@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as $ from 'jquery';
+
+declare let $: any;
 @Component({
   selector: 'app-createflow',
   templateUrl: './createFlow.component.html',
