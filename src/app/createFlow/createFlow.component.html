@@ -1,35 +1,88 @@
-<div id="wrapper">
-  <!-- Sidebar -->
-  <div id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-          <ul class="nav nav-pills">
-          <li class="sidebar-brand">
-              <a>
-                  Start Bootstrap
-              </a>
-              <div class="scrollbar" id="style-1">
+<!-- <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;">
+<img src="/assets/pipe0.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
+<img src="/assets/pipe1.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
+<img src="/assets/pump.png" class="draggablee" id="pump" style="width: 100px;height: 100px;"> -->
 
-                <div class="draggable" dblclick="dblclickk" cdkDrag ></div>
+<div class="wrapper">
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <h3>Bootstrap Sidebar</h3>
+    </div>
 
-                <div  class="movetest" id="movetest" style="position: absolute;display: inline-block">
-                  <div class="resize-drag" id="dragDiv_1" >
-                    <div class="draggable" data-toggle="modal" data-target="#exampleModal"></div>
-                  </div>
-                  <div class="resize-drag" id="dragDiv_1">
-                    <div class="draggable2" ondblclick="dblclickk()"></div>
-                  </div>
-                </div>
+    <ul class="list-unstyled components">
+      <p>Component</p>
+      <li class="active">
+        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tank</a>
+        <ul class="collapse list-unstyled" id="homeSubmenu">
+
+            <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;">
+
+        </ul>
+      </li>
+      <li>
+        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pump</a>
+        <ul class="collapse list-unstyled" id="pageSubmenu">
+
+          <img src="/assets/pump.png" class="draggablee" id="pump" style="width: 100px;height: 100px;">
+
+        </ul>
+      </li>
+      <li class="active">
+        <a href="#homeSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pipe</a>
+        <ul class="collapse list-unstyled" id="homeSubmenu2">
+
+          <img src="/assets/pipe0.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
+          <img src="/assets/pipe1.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
+
+        </ul>
+      </li>
+      <li>
+        <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">LED</a>
+        <ul class="collapse list-unstyled" id="pageSubmenu2">
+          
+        </ul>
+      </li>
+
+    </ul>
+
+    <button (click)="onSave()">Save</button>
+
+  </nav>
+
+  <div id="content">
+
+    <div #pdfCanvas id="pdfCanvas" class="pdfCanvas">
+      <!-- <img src="/assets/pump.png" class="" id="_sdkfsfoksok" style="width: 100px;height: 100px; top:500px, left: 478px"> -->
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                <input type="text" class="form-control" id="recipient-name">
               </div>
-          </li>
-          </ul>
-      </ul>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Message:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- /#sidebar-wrapper -->
-
-  <!-- Page Content -->
-
-  <div id="pdfCanvas" class="pdfCanvas" ></div>
-  <!-- /#page-content-wrapper -->
 </div>
-
-<!-- /#wrapper -->

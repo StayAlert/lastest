@@ -1,187 +1,189 @@
-/*!
- * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/)
- * Copyright 2013-2016 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
- */
+/*
+    DEMO STYLE
+*/
 
-.pdfCanvas {
-  background-size: 22px 22px;
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}.pdfCanvas {
+  background-size: 10px 10px;
   background-image: linear-gradient(to right, rgba(73, 127, 160, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(118, 159, 184, 0.2) 1px, transparent 1px);
   border: 1px solid #dbdbdb;
   height: 100%;
-  width: 10in;
+  width: 100%;
   position: fixed;
-  
   border: 1px solid black;
   display: inline-block;
-}
-
-body {
-  font-family: sans-serif;
-}
-
-.resize-drag {
-  background-color: transparent;
-  color: #000;
-  border-radius: 0px 2px 2px 0px;
-  padding: 0px;
-  margin: 1px 1px;
+}.draggablee{
   width: 100px;
-  min-width: 50px;
-  min-height: 20px;
-  /* This makes things *much* easier */
-  box-sizing: border-box;
+  height: 100px;
+  margin-left: 70px;
+  background-color: green;
 }
-
 .dropped-element{
-  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin-left: 70px;
+  background-color: green;
 }
 
-.resize-drag:hover {
-  background-color: rgba(34, 153, 238, 0.6);
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
 }
 
-.resize-container {
-  width: 100%;
-  height: 240px;
-  z-index: 100;
-}
- body {
-  overflow-x: hidden;
-}
-
-/* Toggle Styles */
-
-#wrapper {
-  padding-left: 0;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
 }
 
-#wrapper.toggled {
-  padding-left: 250px;
+.navbar {
+    padding: 15px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#sidebar-wrapper {
-  z-index: 1000;
-  position: fixed;
-  left: 250px;
-  width: 0;
-  height: 100%;
-  margin-left: -250px;
-  overflow-y: auto;
-  background: #000;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
 }
 
-#wrapper.toggled #sidebar-wrapper {
-  width: 250px;
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
 }
 
-#page-content-wrapper {
-  width: 100%;
-  position: absolute;
-  padding: 15px;
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
 }
 
-#wrapper.toggled #page-content-wrapper {
-  position: absolute;
-  margin-right: -250px;
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
 }
 
-/* Sidebar Styles */
-.wrap{
-width: 1000px;
-height: 800px;
-border : 2px solid gray;
-}
-.draggable{
-width: 100px;
-height: 100px;
-background-color: crimson;
-}
-.draggable2{
-width: 100px;
-height: 100px;
-background-color: green;
+#sidebar.active {
+    margin-left: -250px;
 }
 
-.sidebar-nav {
-  position: absolute;
-  top: 0;
-  width: 250px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
 }
 
-.sidebar-nav li {
-  text-indent: 20px;
-  line-height: 40px;
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
 }
 
-.sidebar-nav li a {
-  display: block;
-  text-decoration: none;
-  color: #999999;
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
 }
 
-.sidebar-nav li a:hover {
-  text-decoration: none;
-  color: #fff;
-  background: rgba(255,255,255,0.2);
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
 }
 
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
-  text-decoration: none;
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
 }
 
-.sidebar-nav > .sidebar-brand {
-  height: 65px;
-  font-size: 18px;
-  line-height: 60px;
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
 }
 
-.sidebar-nav > .sidebar-brand a {
-  color: #999999;
+a[data-toggle="collapse"] {
+    position: relative;
 }
 
-.sidebar-nav > .sidebar-brand a:hover {
-  color: #fff;
-  background: none;
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
 }
 
-@media(min-width:768px) {
-  #wrapper {
-      padding-left: 250px;
-  }
-
-  #wrapper.toggled {
-      padding-left: 0;
-  }
-
-  #sidebar-wrapper {
-      width: 250px;
-  }
-
-  #wrapper.toggled #sidebar-wrapper {
-      width: 0;
-  }
-
-  #page-content-wrapper {
-      padding: 20px;
-      position: relative;
-  }
-
-  #wrapper.toggled #page-content-wrapper {
-      position: relative;
-      margin-right: 0;
-  }
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
 }
 
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+a.download {
+    background: #fff;
+    color: #7386D5;
+}
+
+a.article,
+a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+}
