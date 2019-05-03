@@ -27,12 +27,11 @@ mongoose.connection.on('disconnected', function () {
   console.log('disconnected Mongo');
 })
 
-//Model
+//ModelImg
 var ScheMa = mongoose.Schema;
 var ImgSchema = new ScheMa({
   name: String
 })
-
 var picModel = mongoose.model('pic', ImgSchema);
 
 const multer = require('multer');
@@ -118,6 +117,91 @@ app.post('/addpic', function (req,res) {
   // res.status(200).json({
   //   message: 'It worked '+pathed,
   // });
+})
+
+app.post('/checkItem', function(req,res) {
+  console.log(req.body.id)
+  let idOBJ2 = req.body.id;
+
+  addressModel.where('idOBJ').equals(idOBJ2).exec((err, data) => {
+  console.log("query",data)
+  lengthh = data.length
+  console.log(lengthh)
+
+  if(lengthh > 0) {
+    idMongo = data[0]._id
+    let dataSend = {wordInputOpen: data[0].wordInputOpen, 
+      bitInputOpen: data[0].bitInputOpen,
+      wordInputClose: data[0].wordInputClose,
+      bitInputClose: data[0].bitInputClose}
+    res.json(dataSend);
+  } else {
+    let dataSend = {Object: "not thing"}
+    res.json(dataSend);
+    }
+  })
+  //res.json({result: "success"});
+})
+
+//ModelAddress
+var ScheMaAddress = mongoose.Schema;
+var addressSchema = new ScheMaAddress({
+  idOBJ: String,
+  wordInputOpen: String,
+  bitInputOpen: String,
+  wordInputClose: String,
+  bitInputClose: String
+})
+var addressModel = mongoose.model('address', addressSchema);
+
+app.post('/addAddress', function(req, res) {
+  var idOBJ1 = req.body.idObj
+  var wordInputOpen1 = req.body.wordInputOpen;
+  var bitInputOpen1 = req.body.bitInputOpen;
+  var wordInputClose1 = req.body.wordInputClose;
+  var bitInputClose1 = req.body.bitInputClose;
+
+  var lengthh;
+  var idMongo;
+  console.log("body")
+
+  // var newImg = picModel({
+  //   name: namee
+  // });
+
+  addressModel.where('idOBJ').equals(idOBJ1).exec((err, data) => {
+    console.log("query",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    if(lengthh > 0) {
+      idMongo = data[0]._id
+      addressModel.findByIdAndUpdate(idMongo, {$set:{wordInputOpen: wordInputOpen1, 
+        bitInputOpen: bitInputOpen1,
+        wordInputClose: wordInputClose1,
+        bitInputClose: bitInputClose1}},
+        function(err, doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    
+        console.log(doc);
+      });
+    } else {
+      var newAddr = addressModel({
+        idOBJ: idOBJ1,
+        wordInputOpen: wordInputOpen1,
+        bitInputOpen: bitInputOpen1,
+        wordInputClose: wordInputClose1,
+        bitInputClose: bitInputClose1
+      })
+      newAddr.save(function(err) {
+        if (err) throw err;
+    
+        console.log("item's save")
+      })
+    }
+  })
 })
 
 const server = app.listen(3000, function () {

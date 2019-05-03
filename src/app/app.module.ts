@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { DataService } from './data.service';
 
 import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { FlowComponent } from './flows/flow.component';
 import { HomeComponent } from './home/home.component';
@@ -14,11 +15,13 @@ import { createFlowComponent } from './createFlow/createFlow.component';
 import { LoggComponent } from './logg/logg.component';
 import { ControlComponent } from './control/control.component';
 
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatInputModule, MatFormFieldModule, MatToolbarModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule } from '@angular/material';
+// import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatToolbarModule } from '@angular/material/toolbar';
+// import { MatButtonModule } from '@angular/material/button';
+// import { MatIconModule } from '@angular/material/icon';
+// import { MatTableModule } from '@angular/material/table';
+// import { MatCardModule } from '@angular/material';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -29,7 +32,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HomeComponent,
     createFlowComponent,
     LoggComponent,
-    ControlComponent
+    ControlComponent,
   ],
   imports: [
     DragDropModule,
@@ -42,6 +45,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HttpClientModule,
     FormsModule,
     MatTableModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'home', component: HomeComponent },
       { path: 'flow', component: FlowComponent },

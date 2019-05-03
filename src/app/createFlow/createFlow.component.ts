@@ -1,5 +1,9 @@
 import { Component, OnInit, Renderer2, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+//import { isDataSource } from '@angular/cdk/collections';
+
 // import * as $ from 'jquery';
 declare let $: any;
 //declare let $: any;
@@ -11,18 +15,26 @@ declare let $: any;
 })
 
 export class createFlowComponent implements OnInit, AfterViewInit{
-  imgNameArray1:any[] = []
+  imgNameArray1:any[] = [];
+
+  pWordiOpen:String = '0';
+  pBitiOpen:String = '0';
+  pWordiClose:String = '0';
+  pBitiClose:String = '0';
+
+  public newTest = '_sddsi';
+
+  public testV:String = "200";
+
+  public idsOBJ = 'noID';
 
   @ViewChild('pdfCanvas') divSection: any;
 
   constructor(private http: HttpClient, private renderer:Renderer2, private el: ElementRef) {}
 
   ngOnInit() {
-    // $('body').on('mousedown', 'img', function () {
-    //     $('#sidebarCollapse').on('click', function () {
-    //         $('#sidebar').toggleClass('active');
-    //     });
-    // });
+
+    var self = this;
 
     var ID = function () {
         return '_' + Math.random().toString(36).substr(2, 9);
@@ -83,11 +95,15 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       });
     })
 
-    $('body').on('dblclick', 'img',function(){
+    $('body').on('click', 'img',function(){
       console.log("inFunc");
       var ids = this.id
       console.log(ids);
-  })
+      self.idsOBJ = ids;
+      console.log(self.idsOBJ);
+      self.onSetForm(ids)
+    })
+  
 
     //$('body').on('mousedown', 'img', addDraggable())
 
@@ -95,28 +111,6 @@ export class createFlowComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit() {
     console.log(this.divSection.nativeElement);
-    // const div = this.renderer.createElement('div');
-    // const text = this.renderer.createText('Hello world!');
-
-    //id
-    // this.renderer.setProperty(imgg, 'id', '_jdshdh');
-    // //class
-    // this.renderer.addClass(imgg, 'ui-draggable-handle');
-    // this.renderer.addClass(imgg, 'pipe');
-    // this.renderer.addClass(imgg, 'ui-draggable');
-    // //src
-    // this.renderer.setProperty(imgg, 'src', 'http://localhost:4200/assets/pipe0.png');
-    // //css
-    // this.renderer.setStyle(imgg, 'width', '100px');
-    // this.renderer.setStyle(imgg, 'height', '100px');
-    // this.renderer.setStyle(imgg, 'left', '267px');
-    // this.renderer.setStyle(imgg, 'top', '236px');
-    // this.renderer.setStyle(imgg, 'position', 'absolute');
-    // //togle-target
-    // this.renderer.setAttribute(imgg, 'data-toggle', 'modal');
-    // this.renderer.setAttribute(imgg, 'data-target', '#exampleModal');
-
-    //this.renderer.appendChild(this.divSection.nativeElement, imgg);
 
     if(localStorage.length > 0)
     {
@@ -207,6 +201,66 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     
   }
 
+  onSetForm(idF) {
+    //this.upDateForm.setValue('300');
+    console.log(idF)
+    let data = {
+      id: idF
+    }
+    let reciveData;
+
+    let upURL = 'http://localhost:3000/checkItem';
+    console.log(data)
+
+    this.http.post<any>(upURL, data).subscribe(result => {
+      reciveData = result;
+      console.log(result);
+      this.pWordiOpen = result.wordInputOpen;
+      this.pBitiOpen = result.bitInputOpen;
+      this.pWordiClose = result.wordInputClose;
+      this.pBitiClose = result.bitInputClose;
+
+      console.log("1", this.pWordiOpen)
+      console.log("2", this.pBitiOpen)
+      console.log("3", this.pWordiClose)
+      console.log("4", this.pBitiClose)
+    })
+  }
+
+  onSendAddr(form: NgForm) {
+    if (form.invalid) {
+      return 0;
+    }
+    // let idObj0 = this.idsOBJ;
+    //this.newTest = this.idsOBJ
+    let idObj0 = this.idsOBJ;
+    let wordInputOpen0 = form.value.wordInputOpen;
+    let bitInputOpen0 = form.value.bitInputOpen;
+    let wordInputClose0 = form.value.wordInputClose;
+    let bitInputClose0 = form.value.bitInputClose;
+    //console.log("id", this.newTest)
+    console.log("id", this.idsOBJ)
+    let data = {
+      idObj: idObj0,
+      wordInputOpen: wordInputOpen0,
+      bitInputOpen: bitInputOpen0,
+      wordInputClose: wordInputClose0,
+      bitInputClose: bitInputClose0
+    }
+
+    let upURL = 'http://localhost:3000/addAddress';
+    console.log(data)
+
+    this.http.post<any>(upURL, data).subscribe(res => {
+      console.log(res);
+    })
+  }
+
+  // onGetidd() {
+  //   var ids = this.newTest;
+  //   console.log("inGetId", ids)
+  //   return ids;
+  // }
   // onGetIMG() {
   //   this.http.get<any>('http://localhost:3000/getNameimg').subscribe(result=>{
   //     this.imgNameArray1 = result.data;
