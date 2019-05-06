@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2, AfterViewInit, ElementRef, ViewChild } fr
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { interval } from 'rxjs';
+//import { Routes, RouterModule, Router } from '@angular/router';
 
 // import * as $ from 'jquery';
 declare let $: any;
@@ -18,18 +19,23 @@ export class createFlowComponent implements OnInit, AfterViewInit{
 
   OutputsArr:any[] = [];
 
-  APILinkI:string = 'Nothing';
-  APILinkO:string = 'Nothing';
-  pWordiOpen:string = '0';
-  pBitiOpen:string = '0';
-  pStatusOpen:string = '0';
-  pWordiClose:string = '0';
-  pBitiClose:string = '0';
-  pStatusClose:string = '0';
-  wordOUTOUT:string = '0';
-  bitOUTPUT:string = '0';
+  PumpAPILinkI:string = 'Nothing';
+  PumpAPILinkO:string = 'Nothing';
+  PumppWordiOpen:string = '0';
+  PumppBitiOpen:string = '0';
+  PumppStatusOpen:string = '0';
+  PumppWordiClose:string = '0';
+  PumppBitiClose:string = '0';
+  PumppStatusClose:string = '0';
+  PumpwordOUTOUT:string = '0';
+  PumpbitOUTPUT:string = '0';
+
+  TankAPILinkO:string = 'Nothing';
+  TankwordOUTPUT:string = '0';
+  TankbitOUTPUT:string = '0';
 
   public idsOBJ = 'noID';
+  public classOBJ = 'noClass';
 
   @ViewChild('pdfCanvas') divSection: any;
 
@@ -64,6 +70,9 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             }else if($(ui.draggable)[0].id == "pump"){
                 var classnn="pump";
                 var target="#exampleModal"
+            }else if($(ui.draggable)[0].id == "pipe"){
+                var classnn="pipe";
+                var target="#exampleModal0"
             }
 
             var clone = ui.draggable.clone(false);
@@ -104,6 +113,9 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       console.log("inFunc");
       var ids = this.id
       self.idsOBJ = ids;
+      var classses = this.className.split(" ")
+      self.classOBJ = classses[1];
+      //console.log("class2",classses[1])
       self.onSetForm(ids)
     })
   
@@ -229,11 +241,11 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   }
 
   onTestFind() {
-    let testa = localStorage.getItem("ss");
-    console.log(testa);
-    if(testa == null){
-      console.log("almost")
-    }
+    // let testa = localStorage.getItem("ss");
+    // console.log(testa);
+    // if(testa == null){
+    //   console.log("almost")
+    // }
   }
 
   onSave() {
@@ -260,12 +272,13 @@ export class createFlowComponent implements OnInit, AfterViewInit{
 
       if((classs.indexOf("pump")>-1) || (classs.indexOf("tank")>-1)){
         console.log("can save")
+        let classForSave = classs.split(" ")
 
         let showURL = 'http://localhost:3000/addShowOutput';
 
         let dataOfShow = {
           id: ids,
-          class: classs
+          class: classForSave[1]
         }
 
         this.http.post<any>(showURL, dataOfShow).subscribe(res => {
@@ -301,32 +314,36 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     let data = {
       id: idF
     }
-    let reciveData;
 
-    let upURL = 'http://localhost:3000/checkItem';
-    // console.log(data)
+    if (this.classOBJ == "pump")
+    {
+      let upURL = 'http://localhost:3000/checkItemPump';
+      // console.log(data)
 
-    this.http.post<any>(upURL, data).subscribe(result => {
-      reciveData = result;
-      console.log(result);
-      this.pWordiOpen = result.wordInputOpen;
-      this.pBitiOpen = result.bitInputOpen;
-      this.pStatusOpen = result.statusInputOpen;
-      this.pWordiClose = result.wordInputClose;
-      this.pBitiClose = result.bitInputClose;
-      this.pStatusClose = result.statusInputClose;
-      this.wordOUTOUT = result.wordOutput;
-      this.bitOUTPUT = result.bitOutput;
-      this.APILinkI = result.apiLinkI;
-      this.APILinkO = result.apiLinkO;
-
-      // console.log("1", this.pWordiOpen)
-      // console.log("2", this.pBitiOpen)
-      // console.log("3", this.pStatusOpen)
-      // console.log("4", this.pWordiClose)
-      // console.log("5", this.pBitiClose)
-      // console.log("6", this.pStatusClose)
-    })
+      this.http.post<any>(upURL, data).subscribe(result => {
+        console.log(result);
+        this.PumppWordiOpen = result.wordInputOpen;
+        this.PumppBitiOpen = result.bitInputOpen;
+        this.PumppStatusOpen = result.statusInputOpen;
+        this.PumppWordiClose = result.wordInputClose;
+        this.PumppBitiClose = result.bitInputClose;
+        this.PumppStatusClose = result.statusInputClose;
+        this.PumpwordOUTOUT = result.wordOutput;
+        this.PumpbitOUTPUT = result.bitOutput;
+        this.PumpAPILinkI = result.apiLinkI;
+        this.PumpAPILinkO = result.apiLinkO;
+      })
+    }
+    else if (this.classOBJ == "tank")
+    {
+      let upURL = 'http://localhost:3000/checkItemTank';
+      this.http.post<any>(upURL, data).subscribe(result => {
+        console.log(result);
+        this.TankAPILinkO = result.apiLinkO;
+        this.TankwordOUTPUT = result.wordOutput;
+        this.TankbitOUTPUT = result.bitOutput;
+      })
+    }
   }
 
   onSendAddr(form: NgForm) {
@@ -335,39 +352,68 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     }
     // let idObj0 = this.idsOBJ;
     //this.newTest = this.idsOBJ
-    let idObj0 = this.idsOBJ;
-    let apiLinkI0 = form.value.apiLinkI;
-    let apiLinkO0 = form.value.apiLinkO;
-    let wordInputOpen0 = form.value.wordInputOpen;
-    let bitInputOpen0 = form.value.bitInputOpen;
-    let statusInputOpen0 = form.value.statusInputOpen;
-    let wordInputClose0 = form.value.wordInputClose;
-    let bitInputClose0 = form.value.bitInputClose;
-    let statusInputClose0 = form.value.statusInputClose;
-    let wordOutput0 = form.value.wordOutput;
-    let bitOutput0 = form.value.bitOutput;
-    //console.log("id", this.newTest)
-    let data = {
-      idObj: idObj0,
-      apiLinkI: apiLinkI0,
-      apiLinkO: apiLinkO0,
-      wordInputOpen: wordInputOpen0,
-      bitInputOpen: bitInputOpen0,
-      statusInputOpen: statusInputOpen0,
-      wordInputClose: wordInputClose0,
-      bitInputClose: bitInputClose0,
-      statusInputClose: statusInputClose0,
-      wordOutput: wordOutput0,
-      bitOutput: bitOutput0
+    console.log("checkClass",this.classOBJ)
+    if(this.classOBJ == "pump")
+    {
+      console.log("form", form)
+      let idObj0 = this.idsOBJ;
+      let classObj0 = this.classOBJ;
+      let apiLinkI0 = form.value.PumpapiLinkI;
+      let apiLinkO0 = form.value.PumpapiLinkO;
+      let wordInputOpen0 = form.value.PumpwordInputOpen;
+      let bitInputOpen0 = form.value.PumpbitInputOpen;
+      let statusInputOpen0 = form.value.PumpstatusInputOpen;
+      let wordInputClose0 = form.value.PumpwordInputClose;
+      let bitInputClose0 = form.value.PumpbitInputClose;
+      let statusInputClose0 = form.value.PumpstatusInputClose;
+      let wordOutput0 = form.value.PumpwordOutput;
+      let bitOutput0 = form.value.PumpbitOutput;
+      //console.log("id", this.newTest)
+      let data = {
+        idObj: idObj0,
+        classObj: classObj0,
+        apiLinkI: apiLinkI0,
+        apiLinkO: apiLinkO0,
+        wordInputOpen: wordInputOpen0,
+        bitInputOpen: bitInputOpen0,
+        statusInputOpen: statusInputOpen0,
+        wordInputClose: wordInputClose0,
+        bitInputClose: bitInputClose0,
+        statusInputClose: statusInputClose0,
+        wordOutput: wordOutput0,
+        bitOutput: bitOutput0
+      }
+
+      let upURL = 'http://localhost:3000/addAddressPump';
+      console.log(data)
+
+      this.http.post<any>(upURL, data).subscribe(res => {
+        console.log(res);
+      })
     }
-    console.log("form", data)
+    else if(this.classOBJ == "tank")
+    {
+      let idObj0 = this.idsOBJ;
+      let classObj0 = this.classOBJ;
+      let apiLinkO0 = form.value.TankapiLinkO;
+      let wordOutput0 = form.value.TankwordOutput;
+      let bitOutput0 = form.value.TankbitOutput;
+      let data = {
+        idObj: idObj0,
+        classObj: classObj0,
+        apiLinkO: apiLinkO0,
+        wordOutput: wordOutput0,
+        bitOutput: bitOutput0
+      }
+      console.log("form", data)
 
-    let upURL = 'http://localhost:3000/addAddress';
-    console.log(data)
+      let upURL = 'http://localhost:3000/addAddressTank';
+      console.log(data)
 
-    this.http.post<any>(upURL, data).subscribe(res => {
-      console.log(res);
-    })
+      this.http.post<any>(upURL, data).subscribe(res => {
+        console.log(res);
+      })
+    }
   }
 
   sendToHigh() {
@@ -383,12 +429,12 @@ export class createFlowComponent implements OnInit, AfterViewInit{
 
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     let body = new HttpParams();
-    body.set('status', this.pStatusOpen)
-    let sendUrl = this.APILinkI+this.pWordiOpen+this.pBitiOpen; 
-    console.log("stat", this.pStatusOpen)
+    body.set('status', this.PumppStatusOpen)
+    let sendUrl = this.PumpAPILinkI+this.PumppWordiOpen+this.PumppBitiOpen; 
+    console.log("stat", this.PumppStatusOpen)
     console.log("url", sendUrl)
 
-    this.http.put(sendUrl, {"status": this.pStatusOpen}).subscribe(result => {
+    this.http.put(sendUrl, {"status": this.PumppStatusOpen}).subscribe(result => {
       console.log(result);
     }, err => {
       console.log("err")
@@ -398,16 +444,33 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   sendToLow() {
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     let body = new HttpParams();
-    body.set('status', this.pStatusClose)
-    let sendUrl = this.APILinkO+this.pWordiClose+this.pBitiClose; 
-    console.log("stat", this.pStatusClose)
+    body.set('status', this.PumppStatusClose)
+    let sendUrl = this.PumpAPILinkI+this.PumppWordiClose+this.PumppBitiClose; 
+    console.log("stat", this.PumppStatusClose)
     console.log("url", sendUrl)
 
-    this.http.put(sendUrl, {"status": this.pStatusClose}).subscribe(result => {
+    this.http.put(sendUrl, {"status": this.PumppStatusClose}).subscribe(result => {
       console.log(result);
     }, err => {
       console.log("err")
     });
+  }
+
+  onDeleteItem() {
+    console.log(this.idsOBJ)
+    let deleteID = {
+      id: this.idsOBJ,
+      class: this.classOBJ
+    }
+    let upURL = 'http://localhost:3000/deleteItem';
+
+    this.http.post<any>(upURL, deleteID).subscribe(res => {
+      console.log(res);
+      if(res.stat=="ok")
+      {
+        window.location.reload();
+      }
+    })
   }
 
   getOutput() {
@@ -420,38 +483,69 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     var idForShow;
     var classForShow;
     this.http.get<any>('http://localhost:3000/getShowOutout').subscribe(result=>{
-      for(let s of result){
-        idForShow = s.idItem;
-        classForShow = s.classItem;
-        let datasss = {
-          idddd: s.idItem
-        }
-        this.http.post<any>('http://localhost:3000/getValuefromAddr', datasss).subscribe(res => {
-          var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
 
-          this.http.get<any>(LinkOut).subscribe(result=>{
-            // console.log("status", result.status)
-            // console.log(idForShow)
-            // console.log(classForShow)
-            if(result.status == 1)
-            {
-              if(classForShow.indexOf("pump")>-1)
-              {
-                var elemented = document.querySelector("#"+idForShow)
-                elemented.setAttribute('src', 'http://localhost:4200/assets/pump-on.png')
-              }
+      result.forEach(item => {
+        // console.log("IDitem",item.idItem)
+        // console.log("ClASSitem",item.classItem)
+        if(item.classItem == "pump")
+          {
+            let datasss = {
+              idddd: item.idItem
             }
-            else
-            {
-              if(classForShow.indexOf("pump")>-1)
-              {
-                var elemented = document.querySelector("#"+idForShow)
-                elemented.setAttribute('src', 'http://localhost:4200/assets/pump.png')
-              }
+            //console.log("OutPump")
+            this.http.post<any>('http://localhost:3000/getValuefromAddrPump', datasss).subscribe(res => {
+              var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
+
+              this.http.get<any>(LinkOut).subscribe(result=>{
+                if(result.status == 1)
+                {
+                  // if(classForShow.indexOf("pump")>-1)
+                  // {
+                    var elemented = document.querySelector("#"+item.idItem)
+                    elemented.setAttribute('src', 'http://localhost:4200/assets/pump-on.png')
+                  // }
+                }
+                else
+                {
+                  // if(classForShow.indexOf("pump")>-1)
+                  // {
+                    var elemented = document.querySelector("#"+item.idItem)
+                    elemented.setAttribute('src', 'http://localhost:4200/assets/pump.png')
+                  // }
+                }
+              })
+            })
+          }
+        else if(item.classItem == "tank")
+          {
+            let datasss = {
+              idddd: item.idItem
             }
-          })
-        })
-      }
+            //console.log("OutPump")
+            this.http.post<any>('http://localhost:3000/getValuefromAddrTank', datasss).subscribe(res => {
+              var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
+
+              this.http.get<any>(LinkOut).subscribe(result=>{
+                if(result.status == 1)
+                {
+                  // if(classForShow.indexOf("pump")>-1)
+                  // {
+                    var elemented = document.querySelector("#"+item.idItem)
+                    elemented.setAttribute('src', 'http://localhost:4200/assets/tank1-on.png')
+                  // }
+                }
+                else
+                {
+                  // if(classForShow.indexOf("pump")>-1)
+                  // {
+                    var elemented = document.querySelector("#"+item.idItem)
+                    elemented.setAttribute('src', 'http://localhost:4200/assets/tank1.png')
+                  // }
+                }
+              })
+            })
+          }
+      })
     });
   }
 

@@ -15,7 +15,7 @@
         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tank</a>
         <ul class="collapse list-unstyled" id="homeSubmenu">
 
-            <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;">
+          <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;">
 
         </ul>
       </li>
@@ -39,7 +39,7 @@
       <li>
         <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">LED</a>
         <ul class="collapse list-unstyled" id="pageSubmenu2">
-          
+
         </ul>
       </li>
 
@@ -47,7 +47,7 @@
 
     <button (click)="onSave()">Save</button>
 
-    <!-- <button (click)="onTestFind()">test</button> -->
+    <button (click)="onTestFind()">test</button>
 
   </nav>
 
@@ -75,39 +75,50 @@
               </div> -->
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">API Input Link:</label>
-                <input matInput type="text" [(ngModel)]="APILinkI" class="form-control" name="apiLinkI" id="apiLinkI" placeholder="API Here" required>
+                <input matInput type="text" [(ngModel)]="PumpAPILinkI" class="form-control" name="PumpapiLinkI" id="PumpapiLinkI"
+                  placeholder="API Here" required>
 
                 <label for="recipient-name" class="col-form-label">API Output Link:</label>
-                <input matInput type="text" [(ngModel)]="APILinkO" class="form-control" name="apiLinkO" id="apiLinkO" placeholder="API Here" required>
+                <input matInput type="text" [(ngModel)]="PumpAPILinkO" class="form-control" name="PumpapiLinkO" id="PumpapiLinkO"
+                  placeholder="API Here" required>
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">WORD Input Open:</label>
-                <input matInput type="text" [(ngModel)]="pWordiOpen" class="form-control" name="wordInputOpen" id="wordInputOpen" placeholder="Word Input Open" required>
+                <input matInput type="text" [(ngModel)]="PumppWordiOpen" class="form-control" name="PumpwordInputOpen"
+                  id="PumpwordInputOpen" placeholder="Word Input Open" required>
 
                 <label for="message-text" class="col-form-label">BIT Input Open:</label>
-                <input matInput type="text" [(ngModel)]="pBitiOpen" class="form-control" name="bitInputOpen" id="bitInputOpen" placeholder="Bit Input Open" required>
+                <input matInput type="text" [(ngModel)]="PumppBitiOpen" class="form-control" name="PumpbitInputOpen"
+                  id="PumpbitInputOpen" placeholder="Bit Input Open" required>
 
                 <label for="message-text" class="col-form-label">Status Input Open:</label>
-                <input matInput type="text" [(ngModel)]="pStatusOpen" class="form-control" name="statusInputOpen" id="statusInputOpen" placeholder="Status Input Open" required>
+                <input matInput type="text" [(ngModel)]="PumppStatusOpen" class="form-control" name="PumpstatusInputOpen"
+                  id="PumpstatusInputOpen" placeholder="Status Input Open" required>
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">WORD Input Close:</label>
-                <input matInput type="text" [(ngModel)]="pWordiClose" class="form-control" name="wordInputClose" id="wordInputClose" placeholder="Word Input Close" required>
+                <input matInput type="text" [(ngModel)]="PumppWordiClose" class="form-control" name="PumpwordInputClose"
+                  id="PumpwordInputClose" placeholder="Word Input Close" required>
 
                 <label for="message-text" class="col-form-label">BIT Input Close:</label>
-                <input matInput type="text" [(ngModel)]="pBitiClose" class="form-control" name="bitInputClose" id="bitInputClose" placeholder="Bit Input Close" required>
+                <input matInput type="text" [(ngModel)]="PumppBitiClose" class="form-control" name="PumpbitInputClose"
+                  id="PumpbitInputClose" placeholder="Bit Input Close" required>
 
                 <label for="message-text" class="col-form-label">Status Input Close:</label>
-                <input matInput type="text" [(ngModel)]="pStatusClose" class="form-control" name="statusInputClose" id="statusInputClose" placeholder="Status Input Close" required>
+                <input matInput type="text" [(ngModel)]="PumppStatusClose" class="form-control" name="PumpstatusInputClose"
+                  id="PumpstatusInputClose" placeholder="Status Input Close" required>
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">WORD Output:</label>
-                <input matInput type="text" [(ngModel)]="wordOUTOUT" class="form-control" name="wordOutput" id="wordOutput" placeholder="Word Output" required>
+                <input matInput type="text" [(ngModel)]="PumpwordOUTOUT" class="form-control" name="PumpwordOutput"
+                  id="PumpwordOutput" placeholder="Word Output" required>
 
                 <label for="recipient-name" class="col-form-label">Bit Output:</label>
-                <input matInput type="text" [(ngModel)]="bitOUTPUT" class="form-control" name="bitOutput" id="bitOutput" placeholder="Bit Output" required>
+                <input matInput type="text" [(ngModel)]="PumpbitOUTPUT" class="form-control" name="PumpbitOutput" id="PumpbitOutput"
+                  placeholder="Bit Output" required>
               </div>
               <button type="submit" class="btn btn-primary">Send message</button>
+              <button type="button" (click)="onDeleteItem()" class="btn btn-danger">Delete This Object</button>
             </form>
           </div>
           <div class="modal-footer">
@@ -120,5 +131,75 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Set Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form (submit)="onSendAddr(addForm2)" #addForm2="ngForm">
+              <!-- <div class="form-group">
+                <label for="recipient-name" class="col-form-label">ID Item:</label>
+                <input matInput type="text" [(ngModel)]="idsOBJ" class="form-control" name="idOBJ" id="idOBJ">
+              </div> -->
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">API Input Link:</label>
+                <input matInput type="text" [(ngModel)]="TankAPILinkO" class="form-control" name="TankapiLinkO" id="TankapiLinkO"
+                  placeholder="API Here" required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">WORD Output:</label>
+                <input matInput type="text" [(ngModel)]="TankwordOUTPUT" class="form-control" name="TankwordOutput"
+                  id="TankwordOutput" placeholder="Word Output" required>
+
+                <label for="recipient-name" class="col-form-label">Bit Output:</label>
+                <input matInput type="text" [(ngModel)]="TankbitOUTPUT" class="form-control" name="TankbitOutput" id="TankbitOutput"
+                  placeholder="Bit Output" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Send message</button>
+              <button type="button" (click)="onDeleteItem()" class="btn btn-danger">Delete This Object</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <p>{{ idsOBJ }}</p>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <!-- <button type="button" class="btn btn-success" data-dismiss="modal" (click)="sendToHigh()">On</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="sendToLow()">Off</button> -->
+            <!-- <button type="submit" class="btn btn-primary">Send message</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal0" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <button type="button" (click)="onDeleteItem()" class="btn btn-danger">Delete This Object</button>
+          </div>
+          <div class="modal-footer">
+            <p>{{ idsOBJ }}</p>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <!-- <button type="button" class="btn btn-success" data-dismiss="modal" (click)="sendToHigh()">On</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="sendToLow()">Off</button> -->
+            <!-- <button type="submit" class="btn btn-primary">Send message</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>

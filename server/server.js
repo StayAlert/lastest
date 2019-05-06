@@ -123,11 +123,11 @@ app.post('/checkStatus', function(req,res) {
 
 })
 
-app.post('/checkItem', function(req,res) {
+app.post('/checkItemPump', function(req,res) {
   console.log(req.body.id)
   let idOBJ2 = req.body.id;
 
-  addressModel.where('idOBJ').equals(idOBJ2).exec((err, data) => {
+  addressPumpModel.where('idOBJ').equals(idOBJ2).exec((err, data) => {
   console.log("query",data)
   lengthh = data.length
   console.log(lengthh)
@@ -143,6 +143,31 @@ app.post('/checkItem', function(req,res) {
       wordInputClose: data[0].wordInputClose,
       bitInputClose: data[0].bitInputClose, 
       statusInputClose: data[0].statusInputClose,
+      wordOutput: data[0].wordOutput,
+      bitOutput: data[0].bitOutput
+    }
+    res.json(dataSend);
+  } else {
+    let dataSend = {Object: "not thing"}
+    res.json(dataSend);
+    }
+  })
+  //res.json({result: "success"});
+})
+
+app.post('/checkItemTank', function(req,res) {
+  console.log(req.body.id)
+  let idOBJ2 = req.body.id;
+
+  addressTankModel.where('idOBJ').equals(idOBJ2).exec((err, data) => {
+  console.log("query",data)
+  lengthh = data.length
+  console.log(lengthh)
+
+  if(lengthh > 0) {
+    idMongo = data[0]._id
+    let dataSend = {
+      apiLinkO: data[0].apiLinkO,
       wordOutput: data[0].wordOutput,
       bitOutput: data[0].bitOutput
     }
@@ -263,10 +288,81 @@ app.post('/addItemtoPage', function(req,res) {
   })
 })
 
-//ModelAddress
-var ScheMaAddress = mongoose.Schema;
-var addressSchema = new ScheMaAddress({
+//TankModelAddress
+var ScheMaAddressTank = mongoose.Schema;
+var addressSchemaTank = new ScheMaAddressTank({
   idOBJ: String,
+  classOBJ: String,
+  apiLinkO: String,
+  wordOutput: String,
+  bitOutput: String
+})
+var addressTankModel = mongoose.model('addressTank', addressSchemaTank);
+app.post('/getValuefromAddrTank', function(req,res) {
+  var idshow = req.body.idddd;
+  var lenght;
+  var idNeed;
+
+  addressTankModel.where('idOBJ').equals(idshow).exec((err, data) => {
+    console.log("query",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    res.json(data[0])
+  })
+})
+app.post('/addAddressTank', function(req, res) {
+  var idOBJ1 = req.body.idObj;
+  var apiLinkO1 = req.body.apiLinkO;
+  var classOBJ1 = req.body.classObj;
+  var wordOutput1 = req.body.wordOutput;
+  var bitOutput1 = req.body.bitOutput;
+
+  var lengthh;
+  var idMongo;
+  console.log("body")
+
+  addressTankModel.where('idOBJ').equals(idOBJ1).exec((err, data) => {
+    console.log("query",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    if(lengthh > 0) {
+      idMongo = data[0]._id
+      addressTankModel.findByIdAndUpdate(idMongo, {$set:{
+        apiLinkO: apiLinkO1, 
+        wordOutput: wordOutput1,
+        bitOutput: bitOutput1
+      }},
+        function(err, doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    
+        console.log(doc);
+      });
+    } else {
+      var newAddr = addressTankModel({
+        idOBJ: idOBJ1,
+        classOBJ: classOBJ1,
+        apiLinkO: apiLinkO1,
+        wordOutput: wordOutput1,
+        bitOutput: bitOutput1
+      })
+      newAddr.save(function(err) {
+        if (err) throw err;
+    
+        console.log("item's save")
+      })
+    }
+  })
+})
+
+//PumpModelAddress
+var ScheMaAddressPump = mongoose.Schema;
+var addressSchemaPump = new ScheMaAddressPump({
+  idOBJ: String,
+  classOBJ: String,
   apiLinkI: String,
   apiLinkO: String,
   wordInputOpen: String,
@@ -278,14 +374,14 @@ var addressSchema = new ScheMaAddress({
   wordOutput: String,
   bitOutput: String
 })
-var addressModel = mongoose.model('address', addressSchema);
+var addressPumpModel = mongoose.model('addressPump', addressSchemaPump);
 
-app.post('/getValuefromAddr', function(req,res) {
+app.post('/getValuefromAddrPump', function(req,res) {
   var idshow = req.body.idddd;
   var lenght;
   var idNeed;
 
-  addressModel.where('idOBJ').equals(idshow).exec((err, data) => {
+  addressPumpModel.where('idOBJ').equals(idshow).exec((err, data) => {
     console.log("query",data)
     lengthh = data.length
     console.log(lengthh)
@@ -294,8 +390,9 @@ app.post('/getValuefromAddr', function(req,res) {
   })
 })
 
-app.post('/addAddress', function(req, res) {
+app.post('/addAddressPump', function(req, res) {
   var idOBJ1 = req.body.idObj;
+  var classOBJ1 = req.body.classObj;
   var apiLinkI1 = req.body.apiLinkI;
   var apiLinkO1 = req.body.apiLinkO;
   var wordInputOpen1 = req.body.wordInputOpen;
@@ -315,14 +412,14 @@ app.post('/addAddress', function(req, res) {
   //   name: namee
   // });
 
-  addressModel.where('idOBJ').equals(idOBJ1).exec((err, data) => {
+  addressPumpModel.where('idOBJ').equals(idOBJ1).exec((err, data) => {
     console.log("query",data)
     lengthh = data.length
     console.log(lengthh)
 
     if(lengthh > 0) {
       idMongo = data[0]._id
-      addressModel.findByIdAndUpdate(idMongo, {$set:{
+      addressPumpModel.findByIdAndUpdate(idMongo, {$set:{
         apiLinkI: apiLinkI1,
         apiLinkO: apiLinkO1, 
         wordInputOpen: wordInputOpen1, 
@@ -342,8 +439,9 @@ app.post('/addAddress', function(req, res) {
         console.log(doc);
       });
     } else {
-      var newAddr = addressModel({
+      var newAddr = addressPumpModel({
         idOBJ: idOBJ1,
+        classOBJ: classOBJ1,
         apiLinkI: apiLinkI1,
         apiLinkO: apiLinkO1,
         wordInputOpen: wordInputOpen1,
@@ -362,6 +460,69 @@ app.post('/addAddress', function(req, res) {
       })
     }
   })
+})
+
+app.post('/deleteItem', function(req, res) {
+  var deleteID = req.body.id;
+  var deleteClass = req.body.class;
+  if (deleteClass=="pump" || deleteClass=="tank")
+  {
+    console.log(deleteID)
+    if(deleteClass=="pump")
+    {
+      addressPumpModel.where('idOBJ').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        addressPumpModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinPump")
+        })
+      })
+      itemInPageModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemInPageModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinPage")
+        })
+      })
+      itemShowOutputModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemShowOutputModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinShowOutput")
+        })
+      })
+    }
+    else if(deleteClass=="tank")
+    {
+      addressTankModel.where('idOBJ').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        addressTankModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinTank")
+        })
+      })
+      itemInPageModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemInPageModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinPage")
+        })
+      })
+      itemShowOutputModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemShowOutputModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinShowOutput")
+        })
+      })
+    }
+  }
+  else
+  {
+    console.log("normalDelte")
+    itemInPageModel.where('idItem').equals(deleteID).exec((err, data) => {
+      data[0]._id
+      itemInPageModel.findByIdAndRemove(data[0]._id, (err, data) => {
+        console.log("deleteinPage")
+      })
+    })
+  }
+  let dataSend = {stat: "ok"}
+  res.json(dataSend);
 })
 
 const server = app.listen(3000, function () {
