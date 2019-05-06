@@ -60,10 +60,10 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             
             if($(ui.draggable)[0].id == "tank"){
                 var classnn="tank";
-                var target="#exampleModal"
-            }else if($(ui.draggable)[0].id == "pipe"){
-                var classnn="pipe";
                 var target="#exampleModal2"
+            }else if($(ui.draggable)[0].id == "pump"){
+                var classnn="pump";
+                var target="#exampleModal"
             }
 
             var clone = ui.draggable.clone(false);
@@ -137,7 +137,6 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         console.log("cssA", cssA)
         for(let n=0; n<cssA.length; n++)
         {
-          console.log(cssA[n])
           let css1 = cssA[n].split(":")
           let cssK = css1[0]
           let cssV = css1[1]
@@ -238,8 +237,10 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   }
 
   onSave() {
+    var havess;
+    var needOutput;
     console.log("save")
-    console.log(this.divSection.nativeElement.querySelectorAll('img'))
+    //console.log(this.divSection.nativeElement.querySelectorAll('img'))
     let arr1 = this.divSection.nativeElement.querySelectorAll('img');
     arr1.forEach(element => {
       let ids=element.id;
@@ -256,11 +257,35 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         togle: togglee,
         target: targett
       }
-      let testerr = localStorage.getItem(ids)
 
-      if(testerr == null) {
-        this.OutputsArr.push(ids)
+      if((classs.indexOf("pump")>-1) || (classs.indexOf("tank")>-1)){
+        console.log("can save")
+
+        let showURL = 'http://localhost:3000/addShowOutput';
+
+        let dataOfShow = {
+          id: ids,
+          class: classs
+        }
+
+        this.http.post<any>(showURL, dataOfShow).subscribe(res => {
+        console.log(res);
+        })
       }
+      // let checkdata = {
+      //   id: ids
+      // }
+      // let checkURL = 'http://localhost:3000/checkItem';
+      
+      // this.http.post<any>(checkURL, checkdata).subscribe(result => {
+      //   console.log("checkDAta", result);
+      //   console.log(result.Object)
+      //   if(result.Object == "not thing"){
+      //     havess = 0;
+      //   }else{
+      //     havess = 1;
+      //   }
+      // })
 
       let upURL = 'http://localhost:3000/addItemtoPage';
 
@@ -386,11 +411,48 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   }
 
   getOutput() {
-    for (let j = 0; j < this.OutputsArr.length; j++)
-    {
-      let ids = this.OutputsArr[j]
-      console.log(j)
-    }
+    // var a = [1,2,3]
+    // for (let j of a)
+    // {
+    //   console.log(j)
+    // }
+
+    var idForShow;
+    var classForShow;
+    this.http.get<any>('http://localhost:3000/getShowOutout').subscribe(result=>{
+      for(let s of result){
+        idForShow = s.idItem;
+        classForShow = s.classItem;
+        let datasss = {
+          idddd: s.idItem
+        }
+        this.http.post<any>('http://localhost:3000/getValuefromAddr', datasss).subscribe(res => {
+          var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
+
+          this.http.get<any>(LinkOut).subscribe(result=>{
+            // console.log("status", result.status)
+            // console.log(idForShow)
+            // console.log(classForShow)
+            if(result.status == 1)
+            {
+              if(classForShow.indexOf("pump")>-1)
+              {
+                var elemented = document.querySelector("#"+idForShow)
+                elemented.setAttribute('src', 'http://localhost:4200/assets/pump-on.png')
+              }
+            }
+            else
+            {
+              if(classForShow.indexOf("pump")>-1)
+              {
+                var elemented = document.querySelector("#"+idForShow)
+                elemented.setAttribute('src', 'http://localhost:4200/assets/pump.png')
+              }
+            }
+          })
+        })
+      }
+    });
   }
 
   // onGetidd() {

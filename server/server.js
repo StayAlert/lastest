@@ -155,6 +155,45 @@ app.post('/checkItem', function(req,res) {
   //res.json({result: "success"});
 })
 
+//SaveNeedOutputItem
+var ScheMaShowOutput = mongoose.Schema;
+var ShowOutputSchema = new ScheMaShowOutput({
+  idItem: String,
+  classItem: String
+})
+var itemShowOutputModel = mongoose.model('itemShowOutput', ShowOutputSchema);
+app.get('/getShowOutout', function(req,res) {
+  itemShowOutputModel.find({}, function (err, datas) {
+    res.json(datas)
+  })
+})
+app.post('/addShowOutput', function(req,res) {
+  var idItem2 = req.body.id;
+  var classItem2 = req.body.class;
+  var lengthhhh;
+  var idShowMongo;
+
+  itemShowOutputModel.where('idItem').equals(idItem2).exec((err, data) => {
+    console.log("query",data)
+    lengthhhh = data.length
+    console.log(lengthhhh)
+
+    if(lengthhhh > 0) {
+      //nothing
+    } else {
+      var newItemm = itemShowOutputModel({
+        idItem: idItem2,
+        classItem: classItem2
+      })
+      newItemm.save(function(err) {
+        if (err) throw err;
+    
+        console.log("item's save")
+      })
+    }
+  })
+})
+
 ///SaveItemInPage
 var ScheMaIteminPage = mongoose.Schema;
 var itemInPageSchema = new ScheMaIteminPage({
@@ -240,6 +279,20 @@ var addressSchema = new ScheMaAddress({
   bitOutput: String
 })
 var addressModel = mongoose.model('address', addressSchema);
+
+app.post('/getValuefromAddr', function(req,res) {
+  var idshow = req.body.idddd;
+  var lenght;
+  var idNeed;
+
+  addressModel.where('idOBJ').equals(idshow).exec((err, data) => {
+    console.log("query",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    res.json(data[0])
+  })
+})
 
 app.post('/addAddress', function(req, res) {
   var idOBJ1 = req.body.idObj;
