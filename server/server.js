@@ -119,6 +119,10 @@ app.post('/addpic', function (req,res) {
   // });
 })
 
+app.post('/checkStatus', function(req,res) {
+
+})
+
 app.post('/checkItem', function(req,res) {
   console.log(req.body.id)
   let idOBJ2 = req.body.id;
@@ -130,10 +134,18 @@ app.post('/checkItem', function(req,res) {
 
   if(lengthh > 0) {
     idMongo = data[0]._id
-    let dataSend = {wordInputOpen: data[0].wordInputOpen, 
+    let dataSend = {
+      apiLinkI: data[0].apiLinkI,
+      apiLinkO: data[0].apiLinkO,
+      wordInputOpen: data[0].wordInputOpen, 
       bitInputOpen: data[0].bitInputOpen,
+      statusInputOpen: data[0].statusInputOpen,
       wordInputClose: data[0].wordInputClose,
-      bitInputClose: data[0].bitInputClose}
+      bitInputClose: data[0].bitInputClose, 
+      statusInputClose: data[0].statusInputClose,
+      wordOutput: data[0].wordOutput,
+      bitOutput: data[0].bitOutput
+    }
     res.json(dataSend);
   } else {
     let dataSend = {Object: "not thing"}
@@ -143,23 +155,104 @@ app.post('/checkItem', function(req,res) {
   //res.json({result: "success"});
 })
 
+///SaveItemInPage
+var ScheMaIteminPage = mongoose.Schema;
+var itemInPageSchema = new ScheMaIteminPage({
+  idItem: String,
+  classItem: String,
+  srcItem: String,
+  cssItem: String,
+  toggleItem: String,
+  targetItem: String
+})
+var itemInPageModel = mongoose.model('itemInPage', itemInPageSchema);
+
+app.get('/getItemInPage', function(req,res) {
+  //let itemInPage = itemInPageModel.find({});
+  itemInPageModel.find({}, function (err, datas) {
+    res.json(datas)
+  })
+})
+
+app.post('/addItemtoPage', function(req,res) {
+  var idItem1 = req.body.id;
+  var classItem1 = req.body.class;
+  var srcItem1 = req.body.src;
+  var cssItem1 = req.body.css;
+  var toggleItem1 = req.body.togle;
+  var targetItem1 = req.body.target;
+
+  var lengthhh;
+  var iditemMongo;
+
+  itemInPageModel.where('idItem').equals(idItem1).exec((err, data) => {
+    console.log("query",data)
+    lengthhh = data.length
+    console.log(lengthhh)
+
+    if(lengthhh > 0) {
+      iditemMongo = data[0]._id
+      itemInPageModel.findByIdAndUpdate(iditemMongo, {$set:{
+        classItem: classItem1,
+        srcItem: srcItem1, 
+        cssItem: cssItem1, 
+        toggleItem: toggleItem1,
+        targetItem: targetItem1
+      }},
+        function(err, doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    
+        console.log(doc);
+      });
+    } else {
+      var newItemm = itemInPageModel({
+        idItem: idItem1,
+        classItem: classItem1,
+        srcItem: srcItem1,
+        cssItem: cssItem1,
+        toggleItem: toggleItem1,
+        targetItem: targetItem1
+      })
+      newItemm.save(function(err) {
+        if (err) throw err;
+    
+        console.log("item's save")
+      })
+    }
+  })
+})
+
 //ModelAddress
 var ScheMaAddress = mongoose.Schema;
 var addressSchema = new ScheMaAddress({
   idOBJ: String,
+  apiLinkI: String,
+  apiLinkO: String,
   wordInputOpen: String,
   bitInputOpen: String,
+  statusInputOpen: String,
   wordInputClose: String,
-  bitInputClose: String
+  bitInputClose: String,
+  statusInputClose: String,
+  wordOutput: String,
+  bitOutput: String
 })
 var addressModel = mongoose.model('address', addressSchema);
 
 app.post('/addAddress', function(req, res) {
-  var idOBJ1 = req.body.idObj
+  var idOBJ1 = req.body.idObj;
+  var apiLinkI1 = req.body.apiLinkI;
+  var apiLinkO1 = req.body.apiLinkO;
   var wordInputOpen1 = req.body.wordInputOpen;
   var bitInputOpen1 = req.body.bitInputOpen;
+  var statusInputOpen1 = req.body.statusInputOpen;
   var wordInputClose1 = req.body.wordInputClose;
   var bitInputClose1 = req.body.bitInputClose;
+  var statusInputClose1 = req.body.statusInputClose;
+  var wordOutput1 = req.body.wordOutput;
+  var bitOutput1 = req.body.bitOutput;
 
   var lengthh;
   var idMongo;
@@ -176,10 +269,18 @@ app.post('/addAddress', function(req, res) {
 
     if(lengthh > 0) {
       idMongo = data[0]._id
-      addressModel.findByIdAndUpdate(idMongo, {$set:{wordInputOpen: wordInputOpen1, 
+      addressModel.findByIdAndUpdate(idMongo, {$set:{
+        apiLinkI: apiLinkI1,
+        apiLinkO: apiLinkO1, 
+        wordInputOpen: wordInputOpen1, 
         bitInputOpen: bitInputOpen1,
+        statusInputOpen: statusInputOpen1,
         wordInputClose: wordInputClose1,
-        bitInputClose: bitInputClose1}},
+        bitInputClose: bitInputClose1, 
+        statusInputClose: statusInputClose1,
+        wordOutput: wordOutput1,
+        bitOutput: bitOutput1
+      }},
         function(err, doc){
         if(err){
             console.log("Something wrong when updating data!");
@@ -190,10 +291,16 @@ app.post('/addAddress', function(req, res) {
     } else {
       var newAddr = addressModel({
         idOBJ: idOBJ1,
+        apiLinkI: apiLinkI1,
+        apiLinkO: apiLinkO1,
         wordInputOpen: wordInputOpen1,
         bitInputOpen: bitInputOpen1,
+        statusInputOpen: statusInputOpen1,
         wordInputClose: wordInputClose1,
-        bitInputClose: bitInputClose1
+        bitInputClose: bitInputClose1,
+        statusInputClose: statusInputClose1,
+        wordOutput: wordOutput1,
+        bitOutput: bitOutput1
       })
       newAddr.save(function(err) {
         if (err) throw err;

@@ -1,8 +1,7 @@
 import { Component, OnInit, Renderer2, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-//import { isDataSource } from '@angular/cdk/collections';
+import { interval } from 'rxjs';
 
 // import * as $ from 'jquery';
 declare let $: any;
@@ -17,14 +16,18 @@ declare let $: any;
 export class createFlowComponent implements OnInit, AfterViewInit{
   imgNameArray1:any[] = [];
 
-  pWordiOpen:String = '0';
-  pBitiOpen:String = '0';
-  pWordiClose:String = '0';
-  pBitiClose:String = '0';
+  OutputsArr:any[] = [];
 
-  public newTest = '_sddsi';
-
-  public testV:String = "200";
+  APILinkI:string = 'Nothing';
+  APILinkO:string = 'Nothing';
+  pWordiOpen:string = '0';
+  pBitiOpen:string = '0';
+  pStatusOpen:string = '0';
+  pWordiClose:string = '0';
+  pBitiClose:string = '0';
+  pStatusClose:string = '0';
+  wordOUTOUT:string = '0';
+  bitOUTPUT:string = '0';
 
   public idsOBJ = 'noID';
 
@@ -33,6 +36,14 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   constructor(private http: HttpClient, private renderer:Renderer2, private el: ElementRef) {}
 
   ngOnInit() {
+
+    // Create an Observable that will publish a value on an interval
+    const secondsCounter = interval(5000);
+    // Subscribe to begin publishing values
+    secondsCounter.subscribe(n =>
+    // console.log(`It's been ${n} seconds since subscribing!`)
+      this.getOutput()
+    );
 
     var self = this;
 
@@ -69,19 +80,13 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             $(clone).draggable({
               containment: 'parent',
               start: function(event, ui) {
-                console.log("start")
-                console.log(event)
-                console.log(ui)
+
               },
               drag: function(event, ui) {
-                console.log("drag")
-                console.log(event)
-                console.log(ui)
+
               },
               stop: function(event, ui) {
-                console.log("stop")
-                console.log(event)
-                console.log(ui)
+
               }
             });
           }
@@ -98,9 +103,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     $('body').on('click', 'img',function(){
       console.log("inFunc");
       var ids = this.id
-      console.log(ids);
       self.idsOBJ = ids;
-      console.log(self.idsOBJ);
       self.onSetForm(ids)
     })
   
@@ -112,27 +115,26 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   ngAfterViewInit() {
     console.log(this.divSection.nativeElement);
 
-    if(localStorage.length > 0)
-    {
-      for (let i = 0; i < localStorage.length; i++){
+
+    this.http.get<any>('http://localhost:3000/getItemInPage').subscribe(result=>{
+      console.log(result)
+      for (let i = 0; i < result.length; i++){
         const imgg = this.renderer.createElement('img');
-        let key = localStorage.key(i);
-        let item = JSON.parse(localStorage.getItem(key));
-        console.log(key);
-        console.log(item);
+        console.log(result[i].idItem)
         //id
-        this.renderer.setProperty(imgg, 'id', item.id);
+        this.renderer.setProperty(imgg, 'id', result[i].idItem);
         //class
-        let classes = item.class.split(" ")
+        let classes = result[i].classItem.split(" ")
         for(let n=0; n<classes.length; n++)
         {
           this.renderer.addClass(imgg, classes[n]);
         }
         //src
-         this.renderer.setProperty(imgg, 'src', item.src);
-        let cssB = item.css.replace(/\s/g, "")
+         this.renderer.setProperty(imgg, 'src', result[i].srcItem);
+        //css
+        let cssB = result[i].cssItem.replace(/\s/g, "")
         let cssA = cssB.split(";");
-        console.log(cssA)
+        console.log("cssA", cssA)
         for(let n=0; n<cssA.length; n++)
         {
           console.log(cssA[n])
@@ -141,22 +143,22 @@ export class createFlowComponent implements OnInit, AfterViewInit{
           let cssV = css1[1]
           this.renderer.setStyle(imgg, cssK, cssV);
         }
-        this.renderer.setAttribute(imgg, 'data-toggle', item.togle);
-        this.renderer.setAttribute(imgg, 'data-target', item.target);
+        this.renderer.setAttribute(imgg, 'data-toggle', result[i].toggleItem);
+        this.renderer.setAttribute(imgg, 'data-target', result[i].targetItem);
 
         this.renderer.appendChild(this.divSection.nativeElement, imgg);
 
         $(imgg).draggable({
           containment: 'parent',
           start: function(event, ui) {
-            console.log("start")
-            console.log(event)
-            console.log(ui)
+            // console.log("start")
+            // console.log(event)
+            // console.log(ui)
           },
           drag: function(event, ui) {
-            console.log("drag")
-            console.log(event)
-            console.log(ui)
+            // console.log("drag")
+            // console.log(event)
+            // console.log(ui)
           },
           stop: function(event, ui) {
             console.log("stop")
@@ -165,9 +167,74 @@ export class createFlowComponent implements OnInit, AfterViewInit{
           }
         });
       }
-    }
+    });
+
+    //console.log(Items.length)
+
+    // if(localStorage.length > 0)
+    // {
+    //   for (let i = 0; i < localStorage.length; i++){
+    //     const imgg = this.renderer.createElement('img');
+    //     let key = localStorage.key(i);
+    //     let item = JSON.parse(localStorage.getItem(key));
+    //     // console.log(key);
+    //     // console.log(item);
+    //     //id
+    //     this.renderer.setProperty(imgg, 'id', item.id);
+    //     //class
+    //     let classes = item.class.split(" ")
+    //     for(let n=0; n<classes.length; n++)
+    //     {
+    //       this.renderer.addClass(imgg, classes[n]);
+    //     }
+    //     //src
+    //      this.renderer.setProperty(imgg, 'src', item.src);
+    //     let cssB = item.css.replace(/\s/g, "")
+    //     let cssA = cssB.split(";");
+    //     console.log(cssA)
+    //     for(let n=0; n<cssA.length; n++)
+    //     {
+    //       console.log(cssA[n])
+    //       let css1 = cssA[n].split(":")
+    //       let cssK = css1[0]
+    //       let cssV = css1[1]
+    //       this.renderer.setStyle(imgg, cssK, cssV);
+    //     }
+    //     this.renderer.setAttribute(imgg, 'data-toggle', item.togle);
+    //     this.renderer.setAttribute(imgg, 'data-target', item.target);
+
+    //     this.renderer.appendChild(this.divSection.nativeElement, imgg);
+
+    //     $(imgg).draggable({
+    //       containment: 'parent',
+    //       start: function(event, ui) {
+    //         // console.log("start")
+    //         // console.log(event)
+    //         // console.log(ui)
+    //       },
+    //       drag: function(event, ui) {
+    //         // console.log("drag")
+    //         // console.log(event)
+    //         // console.log(ui)
+    //       },
+    //       stop: function(event, ui) {
+    //         console.log("stop")
+    //         console.log(event)
+    //         console.log(ui)
+    //       }
+    //     });
+    //   }
+    // }
     // this.renderer.appendChild(div, text);
     // this.renderer.appendChild(this.divSection, div);
+  }
+
+  onTestFind() {
+    let testa = localStorage.getItem("ss");
+    console.log(testa);
+    if(testa == null){
+      console.log("almost")
+    }
   }
 
   onSave() {
@@ -181,12 +248,6 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       let csss=element.style.cssText;
       let togglee=element.dataset.toggle;
       let targett=element.dataset.target;
-      console.log(element.id)
-      console.log(element.className)
-      console.log(element.dataset.target)
-      console.log(element.dataset.toggle)
-      console.log(element.src)
-      console.log(element.style.cssText)
       let myObj = {
         id: ids,
         class: classs,
@@ -195,10 +256,18 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         togle: togglee,
         target: targett
       }
+      let testerr = localStorage.getItem(ids)
 
-      localStorage.setItem(ids, JSON.stringify(myObj));
-    })
-    
+      if(testerr == null) {
+        this.OutputsArr.push(ids)
+      }
+
+      let upURL = 'http://localhost:3000/addItemtoPage';
+
+      this.http.post<any>(upURL, myObj).subscribe(res => {
+      console.log(res);
+      })
+    }) 
   }
 
   onSetForm(idF) {
@@ -210,20 +279,28 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     let reciveData;
 
     let upURL = 'http://localhost:3000/checkItem';
-    console.log(data)
+    // console.log(data)
 
     this.http.post<any>(upURL, data).subscribe(result => {
       reciveData = result;
       console.log(result);
       this.pWordiOpen = result.wordInputOpen;
       this.pBitiOpen = result.bitInputOpen;
+      this.pStatusOpen = result.statusInputOpen;
       this.pWordiClose = result.wordInputClose;
       this.pBitiClose = result.bitInputClose;
+      this.pStatusClose = result.statusInputClose;
+      this.wordOUTOUT = result.wordOutput;
+      this.bitOUTPUT = result.bitOutput;
+      this.APILinkI = result.apiLinkI;
+      this.APILinkO = result.apiLinkO;
 
-      console.log("1", this.pWordiOpen)
-      console.log("2", this.pBitiOpen)
-      console.log("3", this.pWordiClose)
-      console.log("4", this.pBitiClose)
+      // console.log("1", this.pWordiOpen)
+      // console.log("2", this.pBitiOpen)
+      // console.log("3", this.pStatusOpen)
+      // console.log("4", this.pWordiClose)
+      // console.log("5", this.pBitiClose)
+      // console.log("6", this.pStatusClose)
     })
   }
 
@@ -234,19 +311,31 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     // let idObj0 = this.idsOBJ;
     //this.newTest = this.idsOBJ
     let idObj0 = this.idsOBJ;
+    let apiLinkI0 = form.value.apiLinkI;
+    let apiLinkO0 = form.value.apiLinkO;
     let wordInputOpen0 = form.value.wordInputOpen;
     let bitInputOpen0 = form.value.bitInputOpen;
+    let statusInputOpen0 = form.value.statusInputOpen;
     let wordInputClose0 = form.value.wordInputClose;
     let bitInputClose0 = form.value.bitInputClose;
+    let statusInputClose0 = form.value.statusInputClose;
+    let wordOutput0 = form.value.wordOutput;
+    let bitOutput0 = form.value.bitOutput;
     //console.log("id", this.newTest)
-    console.log("id", this.idsOBJ)
     let data = {
       idObj: idObj0,
+      apiLinkI: apiLinkI0,
+      apiLinkO: apiLinkO0,
       wordInputOpen: wordInputOpen0,
       bitInputOpen: bitInputOpen0,
+      statusInputOpen: statusInputOpen0,
       wordInputClose: wordInputClose0,
-      bitInputClose: bitInputClose0
+      bitInputClose: bitInputClose0,
+      statusInputClose: statusInputClose0,
+      wordOutput: wordOutput0,
+      bitOutput: bitOutput0
     }
+    console.log("form", data)
 
     let upURL = 'http://localhost:3000/addAddress';
     console.log(data)
@@ -254,6 +343,54 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     this.http.post<any>(upURL, data).subscribe(res => {
       console.log(res);
     })
+  }
+
+  sendToHigh() {
+    // const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    // let body = new HttpParams();
+    // body.set('status', "1");
+    // const sendUrl = 'http://localhost:3700/ControlInput1/00';
+    // this.http.put(sendUrl, {"status": "1"}).subscribe(result => {
+    //   console.log(result);
+    // }, err => {
+    //   console.log("err")
+    // });
+
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    let body = new HttpParams();
+    body.set('status', this.pStatusOpen)
+    let sendUrl = this.APILinkI+this.pWordiOpen+this.pBitiOpen; 
+    console.log("stat", this.pStatusOpen)
+    console.log("url", sendUrl)
+
+    this.http.put(sendUrl, {"status": this.pStatusOpen}).subscribe(result => {
+      console.log(result);
+    }, err => {
+      console.log("err")
+    });
+  }
+
+  sendToLow() {
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    let body = new HttpParams();
+    body.set('status', this.pStatusClose)
+    let sendUrl = this.APILinkO+this.pWordiClose+this.pBitiClose; 
+    console.log("stat", this.pStatusClose)
+    console.log("url", sendUrl)
+
+    this.http.put(sendUrl, {"status": this.pStatusClose}).subscribe(result => {
+      console.log(result);
+    }, err => {
+      console.log("err")
+    });
+  }
+
+  getOutput() {
+    for (let j = 0; j < this.OutputsArr.length; j++)
+    {
+      let ids = this.OutputsArr[j]
+      console.log(j)
+    }
   }
 
   // onGetidd() {
