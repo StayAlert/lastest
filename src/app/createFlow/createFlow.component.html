@@ -10,39 +10,40 @@
     <ul class="list-unstyled components">
       <a>Component</a>
       <li >
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tank</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
+        <a href="#TankSidebar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Tank</a>
+        <ul #TankSidebar class="collapse list-unstyled" id="TankSidebar">
 
-          <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;">
+          <!-- <img src="/assets/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;"> -->
+          <!-- <img src="http://localhost:3000/images/tank1.png" class="draggablee" id="tank" style="width: 100px;height: 100px;"> -->
 
         </ul>
       </li>
       <li>
-        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pump</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu">
+        <a href="#PumpSidebar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pump</a>
+        <ul #PumpSidebar class="collapse list-unstyled" id="PumpSidebar">
 
-          <img src="/assets/pump.png" class="draggablee" id="pump" style="width: 100px;height: 100px;">
+          <!-- <img src="/assets/pump.png" class="draggablee" id="pump" style="width: 100px;height: 100px;"> -->
 
         </ul>
       </li>
       <li >
-        <a href="#homeSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pipe</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu2">
+        <a href="#PipeSidebar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pipe</a>
+        <ul #PipeSidebar class="collapse list-unstyled" id="PipeSidebar">
 
-          <img src="/assets/pipe0.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
-          <img src="/assets/pipe1.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
-
-        </ul>
-      </li>
-      <li>
-        <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">LED</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu2">
+          <!-- <img src="/assets/pipe0.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;">
+          <img src="/assets/pipe1.png" class="draggablee" id="pipe" style="width: 100px;height: 100px;"> -->
 
         </ul>
       </li>
       <li>
-        <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Temporature</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu2">
+        <a href="#LEDSideBar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">LED</a>
+        <ul #LEDSideBar class="collapse list-unstyled" id="LEDSideBar">
+
+        </ul>
+      </li>
+      <li>
+        <a href="#TempSideBar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Temporature</a>
+        <ul #TempSideBar class="collapse list-unstyled" id="TempSideBar">
           <p class="draggablee temp" id="temp" style="width: 100px;height: 50px;">Temp</p>
         </ul>
       </li>
@@ -51,7 +52,7 @@
 
     <button (click)="onSave()">Save</button>
 
-    <button (click)="onTestFind()">test</button>
+    <button (click)="onTestFind()">Add Component</button>
 
   </nav>
 

@@ -15,7 +15,8 @@ declare let $: any;
 })
 
 export class createFlowComponent implements OnInit, AfterViewInit{
-  imgNameArray1:any[] = [];
+  //imgNameArray1:any[] = [];
+  imgNameArray0:any[] = [];
 
   OutputsArr:any[] = [];
 
@@ -39,8 +40,13 @@ export class createFlowComponent implements OnInit, AfterViewInit{
 
   public idsOBJ = 'noID';
   public classOBJ = 'noClass';
+  public srcOBJ = 'noSRC';
 
   @ViewChild('pdfCanvas') divSection: any;
+  @ViewChild('TankSidebar') startTankSection: any;
+  @ViewChild('PumpSidebar') startPumpSection: any;
+  @ViewChild('PipeSidebar') startPipeSection: any;
+  @ViewChild('LEDSideBar') startLedSection: any;
 
   constructor(private http: HttpClient, private renderer:Renderer2, private el: ElementRef) {}
 
@@ -127,7 +133,12 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       self.idsOBJ = ids;
       var classses = this.className.split(" ")
       self.classOBJ = classses[1];
-      //console.log("class2",classses[1])
+      var srcsrc = this.src;
+      console.log("SRC-OBJ1", this.src)
+      srcsrc = this.src.split("off")
+      self.srcOBJ = srcsrc[0];
+      console.log("SRC-OBJ2.1", srcsrc[0])
+      console.log("SRC-OBJ2.1", srcsrc[1])
       self.onSetForm(ids)
     })
 
@@ -147,24 +158,113 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit() {
+    //console.log(this.startSection.nativeElement);
+
+    this.http.get<any>('http://localhost:3000/getNameimg').subscribe(result=>{
+      //this.imgNameArray0 = result.data;
+      //console.log(this.imgNameArray0)
+      console.log(result.data.length)
+      console.log(result.data)
+      for(let i=0; i<result.data.length; i++){
+        let nameIMG = result.data[i].name;
+        let classIMG = result.data[i].class;
+        if(classIMG == "tank")
+        {
+          if(nameIMG.indexOf("off")>-1)
+          {
+            const imgg = this.renderer.createElement('img');
+            //id
+            this.renderer.setProperty(imgg, 'id', classIMG);
+            //class
+            this.renderer.addClass(imgg, 'draggablee');
+            //src
+            let srcDefault = "http://localhost:3000/images/"+nameIMG;
+            this.renderer.setProperty(imgg, 'src', srcDefault);
+            //css
+            this.renderer.setStyle(imgg, 'width', '100px');
+            this.renderer.setStyle(imgg, 'height', '100px');
+
+            this.renderer.appendChild(this.startTankSection.nativeElement, imgg);
+          }
+        }
+        else if(classIMG == "pump")
+        {
+          if(nameIMG.indexOf("off")>-1)
+          {
+            const imgg = this.renderer.createElement('img');
+            //id
+            this.renderer.setProperty(imgg, 'id', classIMG);
+            //class
+            this.renderer.addClass(imgg, 'draggablee');
+            //src
+            let srcDefault = "http://localhost:3000/images/"+nameIMG;
+            this.renderer.setProperty(imgg, 'src', srcDefault);
+            //css
+            this.renderer.setStyle(imgg, 'width', '100px');
+            this.renderer.setStyle(imgg, 'height', '100px');
+
+            this.renderer.appendChild(this.startPumpSection.nativeElement, imgg);
+          }
+        }
+        else if(classIMG == "pipe")
+        {
+          if(nameIMG.indexOf("off")>-1)
+          {
+            const imgg = this.renderer.createElement('img');
+            //id
+            this.renderer.setProperty(imgg, 'id', classIMG);
+            //class
+            this.renderer.addClass(imgg, 'draggablee');
+            //src
+            let srcDefault = "http://localhost:3000/images/"+nameIMG;
+            this.renderer.setProperty(imgg, 'src', srcDefault);
+            //css
+            this.renderer.setStyle(imgg, 'width', '100px');
+            this.renderer.setStyle(imgg, 'height', '100px');
+
+            this.renderer.appendChild(this.startPipeSection.nativeElement, imgg);
+          }
+        }
+        else if(classIMG == "led")
+        {
+          if(nameIMG.indexOf("off")>-1)
+          {
+            const imgg = this.renderer.createElement('img');
+            //id
+            this.renderer.setProperty(imgg, 'id', classIMG);
+            //class
+            this.renderer.addClass(imgg, 'draggablee');
+            //src
+            let srcDefault = "http://localhost:3000/images/"+nameIMG;
+            this.renderer.setProperty(imgg, 'src', srcDefault);
+            //css
+            this.renderer.setStyle(imgg, 'width', '100px');
+            this.renderer.setStyle(imgg, 'height', '100px');
+
+            this.renderer.appendChild(this.startLedSection.nativeElement, imgg);
+          }
+        }
+      }
+
+    });
+
     console.log(this.divSection.nativeElement);
 
 
     this.http.get<any>('http://localhost:3000/getItemInPage').subscribe(result=>{
-      console.log(result)
+      //console.log(result)
       for (let i = 0; i < result.length; i++){
         //const imgg = this.renderer.createElement('img');
         let classFrom = result[i].classItem.split(" ");
         let thisClasss = classFrom[1];
-        console.log(result[i].idItem)
-        //id
+        //console.log(result[i].idItem)
         //this.renderer.setProperty(imgg, 'id', result[i].idItem);
         if(thisClasss == "temp")
         {
           const imgg = this.renderer.createElement('p');
           //id
           this.renderer.setProperty(imgg, 'id', result[i].idItem);
-          console.log("helloTemp")
+          //console.log("helloTemp")
           //class
           let classes = result[i].classItem.split(" ")
           for(let n=0; n<classes.length; n++)
@@ -176,7 +276,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
           //css
           let cssB = result[i].cssItem.replace(/\s/g, "")
           let cssA = cssB.split(";");
-          console.log("cssA", cssA)
+          //console.log("cssA", cssA)
           for(let n=0; n<cssA.length; n++)
           {
             let css1 = cssA[n].split(":")
@@ -224,7 +324,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
           //css
           let cssB = result[i].cssItem.replace(/\s/g, "")
           let cssA = cssB.split(";");
-          console.log("cssA", cssA)
+          //console.log("cssA", cssA)
           for(let n=0; n<cssA.length; n++)
           {
             let css1 = cssA[n].split(":")
@@ -325,6 +425,10 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     // if(testa == null){
     //   console.log("almost")
     // }
+    this.http.get<any>('http://localhost:3000/getNameimg').subscribe(result=>{
+      this.imgNameArray0 = result.data;
+      console.log(this.imgNameArray0)
+    });
   }
 
   onSave() {
@@ -489,6 +593,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       console.log("form", form)
       let idObj0 = this.idsOBJ;
       let classObj0 = this.classOBJ;
+      let src0 = this.srcOBJ;
       let apiLinkI0 = form.value.PumpapiLinkI;
       let apiLinkO0 = form.value.PumpapiLinkO;
       let wordInputOpen0 = form.value.PumpwordInputOpen;
@@ -503,6 +608,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       let data = {
         idObj: idObj0,
         classObj: classObj0,
+        srcObj: src0,
         apiLinkI: apiLinkI0,
         apiLinkO: apiLinkO0,
         wordInputOpen: wordInputOpen0,
@@ -526,12 +632,14 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     {
       let idObj0 = this.idsOBJ;
       let classObj0 = this.classOBJ;
+      let src0 = this.srcOBJ;
       let apiLinkO0 = form.value.TankapiLinkO;
       let wordOutput0 = form.value.TankwordOutput;
       let bitOutput0 = form.value.TankbitOutput;
       let data = {
         idObj: idObj0,
         classObj: classObj0,
+        srcObj: src0,
         apiLinkO: apiLinkO0,
         wordOutput: wordOutput0,
         bitOutput: bitOutput0
@@ -649,6 +757,8 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             //console.log("OutPump")
             this.http.post<any>('http://localhost:3000/getValuefromAddrPump', datasss).subscribe(res => {
               var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
+              var PumpOn = res.srcOBJ+"on.png"
+              var pumpOff = res.srcOBJ+"off.png"
 
               this.http.get<any>(LinkOut).subscribe(result=>{
                 if(result.status == 1)
@@ -656,7 +766,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
                   // if(classForShow.indexOf("pump")>-1)
                   // {
                     var elemented = document.querySelector("#"+item.idItem)
-                    elemented.setAttribute('src', 'http://localhost:4200/assets/pump-on.png')
+                    elemented.setAttribute('src', PumpOn)
                   // }
                 }
                 else
@@ -664,7 +774,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
                   // if(classForShow.indexOf("pump")>-1)
                   // {
                     var elemented = document.querySelector("#"+item.idItem)
-                    elemented.setAttribute('src', 'http://localhost:4200/assets/pump.png')
+                    elemented.setAttribute('src', pumpOff)
                   // }
                 }
               })
@@ -678,6 +788,8 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             //console.log("OutPump")
             this.http.post<any>('http://localhost:3000/getValuefromAddrTank', datasss).subscribe(res => {
               var LinkOut = res.apiLinkO+res.wordOutput+res.bitOutput
+              var TankOn = res.srcOBJ+"on.png"
+              var TankOff = res.srcOBJ+"off.png"
 
               this.http.get<any>(LinkOut).subscribe(result=>{
                 if(result.status == 1)
@@ -685,7 +797,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
                   // if(classForShow.indexOf("pump")>-1)
                   // {
                     var elemented = document.querySelector("#"+item.idItem)
-                    elemented.setAttribute('src', 'http://localhost:4200/assets/tank1-on.png')
+                    elemented.setAttribute('src', TankOn)
                   // }
                 }
                 else
@@ -693,7 +805,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
                   // if(classForShow.indexOf("pump")>-1)
                   // {
                     var elemented = document.querySelector("#"+item.idItem)
-                    elemented.setAttribute('src', 'http://localhost:4200/assets/tank1.png')
+                    elemented.setAttribute('src', TankOff)
                   // }
                 }
               })

@@ -30,7 +30,8 @@ mongoose.connection.on('disconnected', function () {
 //ModelImg
 var ScheMa = mongoose.Schema;
 var ImgSchema = new ScheMa({
-  name: String
+  name: String,
+  class: String
 })
 var picModel = mongoose.model('pic', ImgSchema);
 
@@ -47,15 +48,141 @@ const storage = multer.diskStorage({
 
     var namee = file.originalname;
 
-    var newImg = picModel({
-      name: namee
-    });
+    // var newImg = picModel({
+    //   name: namee
+    // });
 
-    newImg.save(function(err) {
-      if (err) throw err;
+    if ((namee.search("tank"))>-1){
+      console.log("classTank")
+      picModel.where('name').equals(namee).exec((err, data) => {
+        console.log("query",data)
+        lengthhh = data.length
+        console.log(lengthhh)
+    
+        if(lengthhh > 0) {
+          iditemMongo = data[0]._id
+          picModel.findByIdAndUpdate(iditemMongo, {$set:{
+            class: "tank"
+          }},
+            function(err, doc){
+            if(err){
+                console.log("Something wrong when updating data!");
+            }
+        
+            console.log(doc);
+          });
+        } else {
+          var newImg = picModel({
+            name: namee,
+            class: "tank"
+          })
+          newImg.save(function(err) {
+            if (err) throw err;
+        
+            console.log("item's save")
+          })
+        }
+      })
+    }else if ((namee.search("pipe"))>-1){
+      console.log("classPipe")
+      picModel.where('name').equals(namee).exec((err, data) => {
+        console.log("query",data)
+        lengthhh = data.length
+        console.log(lengthhh)
+    
+        if(lengthhh > 0) {
+          iditemMongo = data[0]._id
+          picModel.findByIdAndUpdate(iditemMongo, {$set:{
+            class: "pipe"
+          }},
+            function(err, doc){
+            if(err){
+                console.log("Something wrong when updating data!");
+            }
+        
+            console.log(doc);
+          });
+        } else {
+          var newImg = picModel({
+            name: namee,
+            class: "pipe"
+          })
+          newImg.save(function(err) {
+            if (err) throw err;
+        
+            console.log("item's save")
+          })
+        }
+      })
+    }else if ((namee.search("pump"))>-1){
+      console.log("classPump")
+      picModel.where('name').equals(namee).exec((err, data) => {
+        console.log("query",data)
+        lengthhh = data.length
+        console.log(lengthhh)
+    
+        if(lengthhh > 0) {
+          iditemMongo = data[0]._id
+          picModel.findByIdAndUpdate(iditemMongo, {$set:{
+            class: "pump"
+          }},
+            function(err, doc){
+            if(err){
+                console.log("Something wrong when updating data!");
+            }
+        
+            console.log(doc);
+          });
+        } else {
+          var newImg = picModel({
+            name: namee,
+            class: "pump"
+          })
+          newImg.save(function(err) {
+            if (err) throw err;
+        
+            console.log("item's save")
+          })
+        }
+      })
+    }else if ((namee.search("led"))>-1){
+      console.log("classLED")
+      picModel.where('name').equals(namee).exec((err, data) => {
+        console.log("query",data)
+        lengthhh = data.length
+        console.log(lengthhh)
+    
+        if(lengthhh > 0) {
+          iditemMongo = data[0]._id
+          picModel.findByIdAndUpdate(iditemMongo, {$set:{
+            class: "led"
+          }},
+            function(err, doc){
+            if(err){
+                console.log("Something wrong when updating data!");
+            }
+        
+            console.log(doc);
+          });
+        } else {
+          var newImg = picModel({
+            name: namee,
+            class: "led"
+          })
+          newImg.save(function(err) {
+            if (err) throw err;
+        
+            console.log("item's save")
+          })
+        }
+      })
+    }
 
-      console.log("namecome")
-    })
+    // newImg.save(function(err) {
+    //   if (err) throw err;
+
+    //   console.log("namecome")
+    // })
     // ImageModel.create({ name: file.originalname}, function(err) {
     //   if (err) return console.log("error");
     // })
@@ -383,6 +510,7 @@ var ScheMaAddressTank = mongoose.Schema;
 var addressSchemaTank = new ScheMaAddressTank({
   idOBJ: String,
   classOBJ: String,
+  srcOBJ: String,
   apiLinkO: String,
   wordOutput: String,
   bitOutput: String
@@ -405,6 +533,7 @@ app.post('/addAddressTank', function(req, res) {
   var idOBJ1 = req.body.idObj;
   var apiLinkO1 = req.body.apiLinkO;
   var classOBJ1 = req.body.classObj;
+  var srcOBJ1 = req.body.srcObj;
   var wordOutput1 = req.body.wordOutput;
   var bitOutput1 = req.body.bitOutput;
 
@@ -435,6 +564,7 @@ app.post('/addAddressTank', function(req, res) {
       var newAddr = addressTankModel({
         idOBJ: idOBJ1,
         classOBJ: classOBJ1,
+        srcOBJ: srcOBJ1,
         apiLinkO: apiLinkO1,
         wordOutput: wordOutput1,
         bitOutput: bitOutput1
@@ -453,6 +583,7 @@ var ScheMaAddressPump = mongoose.Schema;
 var addressSchemaPump = new ScheMaAddressPump({
   idOBJ: String,
   classOBJ: String,
+  srcOBJ: String,
   apiLinkI: String,
   apiLinkO: String,
   wordInputOpen: String,
@@ -483,6 +614,7 @@ app.post('/getValuefromAddrPump', function(req,res) {
 app.post('/addAddressPump', function(req, res) {
   var idOBJ1 = req.body.idObj;
   var classOBJ1 = req.body.classObj;
+  var scrOBJ1 = req.body.srcObj;
   var apiLinkI1 = req.body.apiLinkI;
   var apiLinkO1 = req.body.apiLinkO;
   var wordInputOpen1 = req.body.wordInputOpen;
@@ -532,6 +664,7 @@ app.post('/addAddressPump', function(req, res) {
       var newAddr = addressPumpModel({
         idOBJ: idOBJ1,
         classOBJ: classOBJ1,
+        srcOBJ: scrOBJ1,
         apiLinkI: apiLinkI1,
         apiLinkO: apiLinkO1,
         wordInputOpen: wordInputOpen1,
