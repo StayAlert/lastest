@@ -1,0 +1,21 @@
+.inventory-body {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    /* background-image: url("/assets/bg.jpg"); */
+    /* background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    background-size: cover; */
+    }
+#foo{
+    position: fixed;
+    bottom: 20px;
+    right: 0;
+}
+#text{
+    position: fixed;
+    bottom: 0;
+    right: 45px;
+    color: antiquewhite;
+}

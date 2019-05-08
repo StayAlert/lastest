@@ -34,6 +34,9 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   TankwordOUTPUT:string = '0';
   TankbitOUTPUT:string = '0';
 
+  TempAPILinkO:string = 'Nothing';
+  TempID:string = 'Nothing';
+
   public idsOBJ = 'noID';
   public classOBJ = 'noClass';
 
@@ -44,8 +47,8 @@ export class createFlowComponent implements OnInit, AfterViewInit{
   ngOnInit() {
 
     // Create an Observable that will publish a value on an interval
-    const secondsCounter = interval(5000);
-    // Subscribe to begin publishing values
+    const secondsCounter = interval(2000);
+    //Subscribe to begin publishing values
     secondsCounter.subscribe(n =>
     // console.log(`It's been ${n} seconds since subscribing!`)
       this.getOutput()
@@ -73,8 +76,10 @@ export class createFlowComponent implements OnInit, AfterViewInit{
             }else if($(ui.draggable)[0].id == "pipe"){
                 var classnn="pipe";
                 var target="#exampleModal0"
+            }else if($(ui.draggable)[0].id == "temp"){
+                var classnn="temp"
+                var target="#exampleModal3"
             }
-
             var clone = ui.draggable.clone(false);
             clone.attr("id",ID)
                  .attr("data-toggle","modal")
@@ -82,7 +87,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
                  .css('left', ui.offset.left-250)
                  .css('top', ui.offset.top)
                  .css('position', 'absolute')
-                 .removeClass('ui-draggable ui-draggable-dragging draggablee')
+                 .removeClass('ui-draggable ui-draggable-dragging draggablee temp')
                  .addClass(classnn);
 
             $('#pdfCanvas').append(clone);
@@ -97,7 +102,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
               stop: function(event, ui) {
 
               }
-            });
+            })
           }
         }
       });
@@ -109,7 +114,14 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       });
     })
 
-    $('body').on('click', 'img',function(){
+    // $(document).ready(function addDraggable(){
+    //   $(".draggablee").resizable({
+    //   helper: 'clone',
+    //   cursor: 'move'
+    //   });
+    // })
+
+    $('body').on('click', 'img, p',function(){
       console.log("inFunc");
       var ids = this.id
       self.idsOBJ = ids;
@@ -118,6 +130,16 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       //console.log("class2",classses[1])
       self.onSetForm(ids)
     })
+
+    // $('body').on('click', 'p',function(){
+    //   console.log("inFunc");
+    //   var ids = this.id
+    //   self.idsOBJ = ids;
+    //   var classses = this.className.split(" ")
+    //   self.classOBJ = classses[1];
+    //   //console.log("class2",classses[1])
+    //   self.onSetForm(ids)
+    // })
   
 
     //$('body').on('mousedown', 'img', addDraggable())
@@ -131,52 +153,109 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     this.http.get<any>('http://localhost:3000/getItemInPage').subscribe(result=>{
       console.log(result)
       for (let i = 0; i < result.length; i++){
-        const imgg = this.renderer.createElement('img');
+        //const imgg = this.renderer.createElement('img');
+        let classFrom = result[i].classItem.split(" ");
+        let thisClasss = classFrom[1];
         console.log(result[i].idItem)
         //id
-        this.renderer.setProperty(imgg, 'id', result[i].idItem);
-        //class
-        let classes = result[i].classItem.split(" ")
-        for(let n=0; n<classes.length; n++)
+        //this.renderer.setProperty(imgg, 'id', result[i].idItem);
+        if(thisClasss == "temp")
         {
-          this.renderer.addClass(imgg, classes[n]);
-        }
-        //src
-         this.renderer.setProperty(imgg, 'src', result[i].srcItem);
-        //css
-        let cssB = result[i].cssItem.replace(/\s/g, "")
-        let cssA = cssB.split(";");
-        console.log("cssA", cssA)
-        for(let n=0; n<cssA.length; n++)
-        {
-          let css1 = cssA[n].split(":")
-          let cssK = css1[0]
-          let cssV = css1[1]
-          this.renderer.setStyle(imgg, cssK, cssV);
-        }
-        this.renderer.setAttribute(imgg, 'data-toggle', result[i].toggleItem);
-        this.renderer.setAttribute(imgg, 'data-target', result[i].targetItem);
-
-        this.renderer.appendChild(this.divSection.nativeElement, imgg);
-
-        $(imgg).draggable({
-          containment: 'parent',
-          start: function(event, ui) {
-            // console.log("start")
-            // console.log(event)
-            // console.log(ui)
-          },
-          drag: function(event, ui) {
-            // console.log("drag")
-            // console.log(event)
-            // console.log(ui)
-          },
-          stop: function(event, ui) {
-            console.log("stop")
-            console.log(event)
-            console.log(ui)
+          const imgg = this.renderer.createElement('p');
+          //id
+          this.renderer.setProperty(imgg, 'id', result[i].idItem);
+          console.log("helloTemp")
+          //class
+          let classes = result[i].classItem.split(" ")
+          for(let n=0; n<classes.length; n++)
+          {
+            this.renderer.addClass(imgg, classes[n]);
           }
-        });
+          //src
+          //this.renderer.setProperty(imgg, 'src', result[i].srcItem);
+          //css
+          let cssB = result[i].cssItem.replace(/\s/g, "")
+          let cssA = cssB.split(";");
+          console.log("cssA", cssA)
+          for(let n=0; n<cssA.length; n++)
+          {
+            let css1 = cssA[n].split(":")
+            let cssK = css1[0]
+            let cssV = css1[1]
+            this.renderer.setStyle(imgg, cssK, cssV);
+          }
+          this.renderer.setAttribute(imgg, 'data-toggle', result[i].toggleItem);
+          this.renderer.setAttribute(imgg, 'data-target', result[i].targetItem);
+
+          this.renderer.appendChild(this.divSection.nativeElement, imgg);
+
+          $(imgg).draggable({
+            containment: 'parent',
+            start: function(event, ui) {
+              // console.log("start")
+              // console.log(event)
+              // console.log(ui)
+            },
+            drag: function(event, ui) {
+              // console.log("drag")
+              // console.log(event)
+              // console.log(ui)
+            },
+            stop: function(event, ui) {
+              console.log("stop")
+              console.log(event)
+              console.log(ui)
+            }
+          });
+        }
+        else
+        {
+          const imgg = this.renderer.createElement('img');
+          //id
+          this.renderer.setProperty(imgg, 'id', result[i].idItem);
+          //class
+          let classes = result[i].classItem.split(" ")
+          for(let n=0; n<classes.length; n++)
+          {
+            this.renderer.addClass(imgg, classes[n]);
+          }
+          //src
+          this.renderer.setProperty(imgg, 'src', result[i].srcItem);
+          //css
+          let cssB = result[i].cssItem.replace(/\s/g, "")
+          let cssA = cssB.split(";");
+          console.log("cssA", cssA)
+          for(let n=0; n<cssA.length; n++)
+          {
+            let css1 = cssA[n].split(":")
+            let cssK = css1[0]
+            let cssV = css1[1]
+            this.renderer.setStyle(imgg, cssK, cssV);
+          }
+          this.renderer.setAttribute(imgg, 'data-toggle', result[i].toggleItem);
+          this.renderer.setAttribute(imgg, 'data-target', result[i].targetItem);
+
+          this.renderer.appendChild(this.divSection.nativeElement, imgg);
+
+          $(imgg).draggable({
+            containment: 'parent',
+            start: function(event, ui) {
+              // console.log("start")
+              // console.log(event)
+              // console.log(ui)
+            },
+            drag: function(event, ui) {
+              // console.log("drag")
+              // console.log(event)
+              // console.log(ui)
+            },
+            stop: function(event, ui) {
+              console.log("stop")
+              console.log(event)
+              console.log(ui)
+            }
+          });
+        }
       }
     });
 
@@ -254,6 +333,7 @@ export class createFlowComponent implements OnInit, AfterViewInit{
     console.log("save")
     //console.log(this.divSection.nativeElement.querySelectorAll('img'))
     let arr1 = this.divSection.nativeElement.querySelectorAll('img');
+    let arr2 = this.divSection.nativeElement.querySelectorAll('p');
     arr1.forEach(element => {
       let ids=element.id;
       let classs=element.className;
@@ -269,6 +349,8 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         togle: togglee,
         target: targett
       }
+
+      console.log("img", myObj)
 
       if((classs.indexOf("pump")>-1) || (classs.indexOf("tank")>-1)){
         console.log("can save")
@@ -306,6 +388,45 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       console.log(res);
       })
     }) 
+
+    arr2.forEach(element => {
+      let ids=element.id;
+      let classs=element.className;
+      let srcc=element.src;
+      let csss=element.style.cssText;
+      let togglee=element.dataset.toggle;
+      let targett=element.dataset.target;
+      let myObj = {
+        id: ids,
+        class: classs,
+        src: srcc,
+        css: csss,
+        togle: togglee,
+        target: targett
+      }
+      
+
+      console.log("temp", myObj)
+      let classForSave = classs.split(" ")
+
+      let showURL = 'http://localhost:3000/addShowOutput';
+
+      let dataOfShow = {
+        id: ids,
+        class: classForSave[1]
+      }
+
+      this.http.post<any>(showURL, dataOfShow).subscribe(res => {
+        console.log(res);
+      })
+
+      let upURL = 'http://localhost:3000/addItemtoPage';
+
+      this.http.post<any>(upURL, myObj).subscribe(res => {
+        console.log(res);
+      })
+
+    }) 
   }
 
   onSetForm(idF) {
@@ -342,6 +463,16 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         this.TankAPILinkO = result.apiLinkO;
         this.TankwordOUTPUT = result.wordOutput;
         this.TankbitOUTPUT = result.bitOutput;
+      })
+    }
+    else if (this.classOBJ == "temp")
+    {
+      let upURL = 'http://localhost:3000/checkItemTemp';
+      this.http.post<any>(upURL, data).subscribe(result => {
+        console.log(result);
+
+        this.TempAPILinkO = result.apiLinkO;
+        this.TempID = result.TempID;
       })
     }
   }
@@ -414,6 +545,27 @@ export class createFlowComponent implements OnInit, AfterViewInit{
         console.log(res);
       })
     }
+    else if(this.classOBJ == "temp")
+    {
+      let idObj0 = this.idsOBJ;
+      let classObj0 = this.classOBJ;
+      let apiLinkO0 = form.value.TempapiLinkO;
+      let TempID0 = form.value.TempID;
+      let data = {
+        idObj: idObj0,
+        classObj: classObj0,
+        apiLinkO: apiLinkO0,
+        TempID: TempID0
+      }
+      console.log("form", data)
+
+      let upURL = 'http://localhost:3000/addAddressTemp';
+      console.log(data)
+
+      this.http.post<any>(upURL, data).subscribe(res => {
+        console.log(res);
+      })
+    }
   }
 
   sendToHigh() {
@@ -463,6 +615,8 @@ export class createFlowComponent implements OnInit, AfterViewInit{
       class: this.classOBJ
     }
     let upURL = 'http://localhost:3000/deleteItem';
+
+    console.log("delete",deleteID)
 
     this.http.post<any>(upURL, deleteID).subscribe(res => {
       console.log(res);
@@ -545,6 +699,20 @@ export class createFlowComponent implements OnInit, AfterViewInit{
               })
             })
           }
+        else if(item.classItem == "temp")
+        {
+          let datasss = {
+            idddd: item.idItem
+          }
+          this.http.post<any>('http://localhost:3000/getValuefromAddrTemp', datasss).subscribe(res => {
+            var LinkOut = res.apiLinkO+res.TempID;
+
+            this.http.get<any>(LinkOut).subscribe(result=>{
+              var elemented = document.querySelector("#"+item.idItem)
+              elemented.textContent = result.PV;
+            })
+          })
+        }
       })
     });
   }

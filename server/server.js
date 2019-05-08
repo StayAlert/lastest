@@ -180,6 +180,30 @@ app.post('/checkItemTank', function(req,res) {
   //res.json({result: "success"});
 })
 
+app.post('/checkItemTemp', function(req,res) {
+  console.log(req.body.id)
+  let idOBJ2 = req.body.id;
+
+  addressTempOutModel.where('idOBJ').equals(idOBJ2).exec((err, data) => {
+  console.log("query",data)
+  lengthh = data.length
+  console.log(lengthh)
+
+  if(lengthh > 0) {
+    idMongo = data[0]._id
+    let dataSend = {
+      apiLinkO: data[0].apiLinkO,
+      TempID: data[0].TempID
+    }
+    res.json(dataSend);
+  } else {
+    let dataSend = {Object: "not thing"}
+    res.json(dataSend);
+    }
+  })
+  //res.json({result: "success"});
+})
+
 //SaveNeedOutputItem
 var ScheMaShowOutput = mongoose.Schema;
 var ShowOutputSchema = new ScheMaShowOutput({
@@ -280,6 +304,72 @@ app.post('/addItemtoPage', function(req,res) {
         targetItem: targetItem1
       })
       newItemm.save(function(err) {
+        if (err) throw err;
+    
+        console.log("item's save")
+      })
+    }
+  })
+})
+
+//TempOutModelAdress
+var ScheMaAddressTempOut = mongoose.Schema;
+var addressSchemaTempOut = new ScheMaAddressTempOut({
+  idOBJ: String,
+  classOBJ: String,
+  apiLinkO: String,
+  TempID: String
+})
+var addressTempOutModel = mongoose.model('addressTemp', addressSchemaTempOut);
+app.post('/getValuefromAddrTemp', function(req,res) {
+  var idshow = req.body.idddd;
+  var lenghtt;
+  var idNeed;
+
+  addressTempOutModel.where('idOBJ').equals(idshow).exec((err, data) => {
+    console.log("TempQuery",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    res.json(data[0])
+  })
+})
+app.post('/addAddressTemp', function(req, res) {
+  var idOBJ1 = req.body.idObj;
+  var apiLinkO1 = req.body.apiLinkO;
+  var classOBJ1 = req.body.classObj;
+  var TempID1 = req.body.TempID;
+
+  var lengthh;
+  var idMongo;
+  console.log("body")
+
+  addressTempOutModel.where('idOBJ').equals(idOBJ1).exec((err, data) => {
+    console.log("query",data)
+    lengthh = data.length
+    console.log(lengthh)
+
+    if(lengthh > 0) {
+      idMongo = data[0]._id
+      addressTempOutModel.findByIdAndUpdate(idMongo, {$set:{
+        apiLinkO: apiLinkO1, 
+        TempID: TempID1
+      }},
+        function(err, doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    
+        console.log(doc);
+      });
+    } else {
+      var newAddr = addressTempOutModel({
+        idOBJ: idOBJ1,
+        classOBJ: classOBJ1,
+        apiLinkO: apiLinkO1,
+        TempID: TempID1
+      })
+      newAddr.save(function(err) {
         if (err) throw err;
     
         console.log("item's save")
@@ -465,7 +555,9 @@ app.post('/addAddressPump', function(req, res) {
 app.post('/deleteItem', function(req, res) {
   var deleteID = req.body.id;
   var deleteClass = req.body.class;
-  if (deleteClass=="pump" || deleteClass=="tank")
+  console.log("deleteID",deleteID)
+  console.log("deleteClass",deleteClass)
+  if (deleteClass=="pump" || deleteClass=="tank" || deleteClass=="temp")
   {
     console.log(deleteID)
     if(deleteClass=="pump")
@@ -491,10 +583,33 @@ app.post('/deleteItem', function(req, res) {
     }
     else if(deleteClass=="tank")
     {
-      addressTankModel.where('idOBJ').equals(deleteID).exec((err, data) => {
+      addressTempOutModel.where('idOBJ').equals(deleteID).exec((err, data) => {
         data[0]._id
         addressTankModel.findByIdAndRemove(data[0]._id, (err, data) => {
-          console.log("deleteinTank")
+          console.log("deleteinTemp")
+        })
+      })
+      itemInPageModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemInPageModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinPage")
+        })
+      })
+      itemShowOutputModel.where('idItem').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        itemShowOutputModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinShowOutput")
+        })
+      })
+    }
+    else if(deleteClass=="temp")
+    {
+      console.log("deleteID",deleteID)
+      console.log("deleteClass",deleteClass)
+      addressTempOutModel.where('idOBJ').equals(deleteID).exec((err, data) => {
+        data[0]._id
+        addressTempOutModel.findByIdAndRemove(data[0]._id, (err, data) => {
+          console.log("deleteinPump")
         })
       })
       itemInPageModel.where('idItem').equals(deleteID).exec((err, data) => {
