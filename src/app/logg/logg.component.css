@@ -1,18 +1,8 @@
 table {
   width: 100%;
 }
-#tx{
+/* #tx{
   left: 50%;
   justify-content:center;
   color: antiquewhite;
-}
-.mat-header-cell2 {    text-align: center;    }
-.inventory-body {
-  position: fixed;
-  min-width: 100%;
-  background-image: url("/assets/bg.jpg");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: center;
-  background-size: cover;
-  }
+} */

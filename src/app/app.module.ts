@@ -13,7 +13,9 @@ import { FlowComponent } from './flows/flow.component';
 import { HomeComponent } from './home/home.component';
 import { createFlowComponent } from './createFlow/createFlow.component';
 import { LoggComponent } from './logg/logg.component';
+import { LoggTempComponent } from './loggTemp/loggTemp.component';
 import { ControlComponent } from './control/control.component';
+
 
 import { MatInputModule, MatFormFieldModule, MatToolbarModule, MatButtonModule, MatIconModule, MatTableModule, MatCardModule } from '@angular/material';
 // import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,7 +34,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     HomeComponent,
     createFlowComponent,
     LoggComponent,
-    ControlComponent,
+    LoggTempComponent,
+    ControlComponent
   ],
   imports: [
     DragDropModule,
@@ -54,6 +57,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
       { path: 'flow', component: FlowComponent },
       { path: 'createflow', component: createFlowComponent},
       { path: 'logg', component: LoggComponent },
+      { path: 'loggTemp', component: LoggTempComponent },
       { path: 'control', component: ControlComponent }
     ]),
   ],

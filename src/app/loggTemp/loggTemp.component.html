@@ -1,0 +1,37 @@
+<!-- <body  class="inventory-body">
+    
+
+<br> -->
+<br>
+<div id="tx">
+    <h2 [ngStyle]="{'text-align': 'center'}">Temperature</h2>
+    </div>
+<br>
+
+
+<table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">ID</th>
+        <th scope="col">TEMPERATURE *c</th>
+        <th scope="col">TIME</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of LogArray; let i = index">
+        <th scope="row">{{i}}</th>
+        <td>{{item.idLOG}}</td>
+        <td>{{item.TemperatureLOG}}</td>
+        <td>{{item.timeLOG}}</td>
+      </tr>
+      <!-- <tr>
+        <th scope="row">2</th>
+        <td>_jsjhdhj</td>
+        <td>0</td>
+        <td>1</td>
+        <td>1</td>
+        <td>Day/Month/Year : 05.10</td>
+      </tr> -->
+    </tbody>
+  </table>

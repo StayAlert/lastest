@@ -773,6 +773,70 @@ app.post('/deleteItem', function(req, res) {
   res.json(dataSend);
 })
 
+var ScheMaLog = mongoose.Schema;
+var LogSchema = new ScheMaLog({
+  idLOG: String,
+  wordLOG: String,
+  bitLOG: String,
+  statLOG: String,
+  timeLOG: String
+})
+var LogModel = mongoose.model('LogActivity', LogSchema);
+app.get('/getLogActibity', function(req,res) {
+  LogModel.find({}, function (err, datas) {
+    res.json(datas)
+  })
+})
+app.post('/addLogActivity', function(req,res) {
+  var idLOG1 = req.body.idLog;
+  var wordLOG1 = req.body.wordLog;
+  var bitLOG1 = req.body.bitLog;
+  var statLOG1 = req.body.statLog;
+  var timeLOG1 = req.body.timeLog;
+
+  var newLOG = LogModel({
+    idLOG: idLOG1,
+    wordLOG: wordLOG1,
+    bitLOG: bitLOG1,
+    statLOG: statLOG1,
+    timeLOG: timeLOG1
+  })
+  newLOG.save(function(err) {
+    if (err) throw err;
+
+    console.log("item's save")
+  })
+})
+
+var ScheMaLogTemp = mongoose.Schema;
+var LogTempSchema = new ScheMaLogTemp({
+  idLOG: String,
+  TemperatureLOG: String,
+  timeLOG: String
+})
+var LogTempModel = mongoose.model('LogTemperature', LogTempSchema);
+app.get('/getLogTemperature', function(req,res) {
+  LogTempModel.find({}, function (err, datas) {
+    res.json(datas)
+  })
+})
+app.post('/addLogTemperature', function(req,res) {
+  var idLOG1 = req.body.idLog;
+  var TemperatureLOG1 = req.body.TMPLog;
+  var timeLOG1 = req.body.timeLog;
+
+  var newLOG = LogTempModel({
+    idLOG: idLOG1,
+    TemperatureLOG: TemperatureLOG1,
+    timeLOG: timeLOG1
+  })
+  newLOG.save(function(err) {
+    if (err) throw err;
+
+    console.log("item's save")
+  })
+})
+
 const server = app.listen(3000, function () {
   const port = server.address().port;
   console.log("Server is running.. at port: %s", port);
