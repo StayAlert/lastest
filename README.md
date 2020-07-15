@@ -17,11 +17,11 @@ you can double click that object for set WORD/BIT of PLC
 5.run mongoDB
 6.run server.js in folder : lastest-master/server/server.js
 7.run ng serve in folder : lastest-master
-######################################################################################
+======================================================================================
 if you want to see value of object in web changed you have to install OPCUA
 but if you dont have you can use only upload picture for add component, drag&drop, 
 save position of object in web, double click object for set word/bit of PLC
-######################################################################################
+======================================================================================
 ======================================================================================
 
 **************************************File********************************************
